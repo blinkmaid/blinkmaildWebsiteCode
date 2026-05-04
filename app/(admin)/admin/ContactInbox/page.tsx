@@ -170,7 +170,7 @@ export default function ContactsAdmin() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="py-20 text-center text-gray-400 font-medium">
+                   <td colSpan={4} className="py-20 text-center text-gray-400 font-medium">
                       No contacts found in {activeTab}.
                     </td>
                   </tr>
