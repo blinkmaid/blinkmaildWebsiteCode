@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import {
   Phone, Mail, MapPin, Clock, Star, Loader2,
   X, CheckCircle, XCircle, ArrowRight, Shield, MessageSquare, Globe
@@ -76,7 +76,18 @@ export default function Contact() {
   const [contactLoading, setContactLoading] = useState(false);
   const [reviewLoading, setReviewLoading] = useState(false);
   type ToastType = "success" | "error" | null;
-
+const contactData = [
+    { icon: Phone, label: "Concierge Line", val: "+91 93804 19755", tag: "Direct Call" },
+    { icon: Mail, label: "Email Inquiry", val: "support@blinkmaid.com", tag: "Official Mail" },
+    { icon: MapPin, label: "Studio Location", val: "Thanisandra, Bengaluru", tag: "Visit Us" },
+    { icon: Clock, label: "Availability", val: "Mon–Sat, 8AM–8PM", tag: "Working Hours" }
+  ];
+  const { scrollY } = useScroll();
+  
+  // Parallax effects for the background and text
+  const yBg = useTransform(scrollY, [0, 500], [0, 150]);
+  const yText = useTransform(scrollY, [0, 500], [0, -100]);
+  const opacityText = useTransform(scrollY, [0, 300], [1, 0]);
   const [toast, setToast] = useState<{
     message: string;
     type: ToastType;
@@ -123,95 +134,143 @@ export default function Contact() {
     <div className="bg-white text-blinkblack min-h-screen selection:bg-blinkred selection:text-white overflow-x-hidden">
       <Toast {...toast} onClose={() => setToast({ message: "", type: null })} />
 
-      {/* --- CINEMATIC HERO (Exactly as requested) --- */}
-      <section className="relative w-full h-[85vh] flex items-end overflow-hidden">
+  <section className="relative w-full h-[90vh] flex items-end overflow-hidden bg-white">
+      {/* --- BACKGROUND LAYER --- */}
+      <motion.div
+        style={{ y: yBg }}
+        className="absolute inset-0 z-0"
+      >
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
+          className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-110 group-hover:scale-100"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop')" }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-black/30" />
-        </div>
+        />
+        {/* Cinematic Gradient Overlay: Dark to transparent to white */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-white" />
+      </motion.div>
 
-        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pb-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-end">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-[2px] bg-blinkred"></div>
-                <span className="text-xs font-black uppercase tracking-[0.5em] text-blinkred drop-shadow-sm">Concierge Support</span>
-              </div>
-              <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter leading-[0.75] mb-0 drop-shadow-2xl">
-                GET IN <br />
-                <span className="text-blinkblack">TOUCH.</span>
-              </h1>
-            </motion.div>
+      {/* --- CONTENT LAYER --- */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pb-20">
+        <div className="grid lg:grid-cols-12 gap-8 items-end">
+          
+          {/* Main Headline */}
+          <motion.div
+            style={{ y: yText, opacity: opacityText }}
+            className="lg:col-span-8"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: 64 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="h-[1px] bg-blinkred"
+              />
+              <span className="text-[10px] font-black uppercase tracking-[0.8em] text-blinkred mix-blend-difference">
+                Private Concierge
+              </span>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="lg:pb-8"
-            >
-              <p className="text-xl text-blinkblack font-bold leading-relaxed max-w-md border-l-4 border-blinkred pl-6 bg-white/10 backdrop-blur-sm py-2">
-                We believe your time is the ultimate luxury. Let us restore the soul of your environment.
+            <h1 className="text-[18vw] lg:text-[12rem] font-black tracking-[-0.06em] leading-[0.75] mb-0 text-blinkblack uppercase select-none">
+              GET IN <br />
+              <span className="relative inline-block italic">
+                TOUCH
+                {/* Visual Accent: A thin line cutting through the last word */}
+                <span className="absolute left-0 bottom-4 w-full h-[4px] bg-blinkred/20 -z-10" />
+              </span>
+              <span className="text-blinkred">.</span>
+            </h1>
+          </motion.div>
+
+          {/* Sub-text / Manifest Box */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className="lg:col-span-4 lg:pb-6"
+          >
+            <div className="relative p-10 backdrop-blur-xl bg-white/40 border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-tr-[4rem]">
+              {/* Luxury Detail: Serial Number or Tag */}
+              <p className="text-[9px] font-mono text-blinkred mb-4 tracking-widest">BM // 001 — EST 2024</p>
+              
+              <p className="text-xl text-blinkblack font-extrabold leading-[1.4] tracking-tight">
+                We believe your <span className="text-blinkred underline decoration-1 underline-offset-4">time</span> is the ultimate luxury. 
+                Let us restore the soul of your environment.
               </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* --- ENHANCED BENTO GRID: PROFESSIONAL TRANSITION (Refined Hover) --- */}
-      <section className="px-6 mt-24 relative z-20 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { icon: Phone, label: "Concierge Line", val: "+91 93804 19755", tag: "Direct Call" },
-            { icon: Mail, label: "Email Inquiry", val: "support@blinkmaid.com", tag: "Official Mail" },
-            { icon: MapPin, label: "Studio Location", val: "Thanisandra, Bengaluru", tag: "Visit Us" },
-            { icon: Clock, label: "Availability", val: "Mon–Sat, 8AM–8PM", tag: "Working Hours" }
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group relative p-8 rounded-[2.5rem] bg-white border border-gray-100 hover:border-blinkred/20 transition-all duration-500 overflow-hidden shadow-sm hover:shadow-xl"
-            >
-              {/* The Content Wrapper */}
-              <div className="relative z-10">
-                <span className="text-[10px] font-semibold text-red-600 uppercase tracking-[0.3em] mb-6 block opacity650">
+              {/* Decorative corner element */}
+              <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-blinkred/30 rounded-tr-[3.5rem]" />
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30"
+      >
+        <span className="text-[8px] font-black uppercase tracking-widest">Scroll</span>
+        <div className="w-[1px] h-12 bg-blinkblack" />
+      </motion.div>
+    </section>
+
+    <section className="px-6 py-10 relative z-20 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {contactData.map((item, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ 
+              duration: 0.6, 
+              delay: i * 0.1,
+              ease: [0.215, 0.61, 0.355, 1] 
+            }}
+            className="group relative h-[320px] p-8 rounded-[2.5rem] bg-white border border-gray-100 flex flex-col justify-between overflow-hidden transition-all duration-500 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-10px_rgba(227,30,36,0.15)] hover:border-blinkred/10"
+          >
+            {/* The Fluid Background Effect */}
+            <div className="absolute -right-12 -bottom-12 w-32 h-32 bg-gray-50 rounded-full group-hover:bg-blinkred group-hover:scale-[6] transition-transform duration-700 ease-[0.4, 0, 0.2, 1] z-0" />
+
+            <div className="relative z-10 h-full flex flex-col">
+              {/* Top Row: Tag & Icon */}
+              <div className="flex justify-between items-start">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <item.icon className="w-6 h-6 text-blinkred group-hover:text-blinkred transition-colors duration-500" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 group-hover:text-white/60 transition-colors duration-500">
                   {item.tag}
                 </span>
+              </div>
 
-                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blinkred transition-colors duration-500 shadow-sm">
-                  <item.icon className="w-6 h-6 text-blinkblack group-hover:text-white transition-colors duration-500" />
-                </div>
-
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 group-hover:text-blinkblack/50 transition-colors">
+              {/* Bottom Content */}
+              <div className="mt-auto">
+                <p className="text-[11px] font-black uppercase tracking-[0.25em] text-blinkred/60 group-hover:text-white/50 mb-2 transition-colors duration-500">
                   {item.label}
                 </p>
 
-                <h3 className="text-base font-bold text-blinkblack tracking-tight leading-tight group-hover:text-blinkblack transition-colors">
+                <h3 className="text-xl font-bold text-blinkblack tracking-tighter leading-none group-hover:text-white transition-colors duration-500">
                   {item.val}
                 </h3>
 
-                <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-transparent group-hover:text-blinkred transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                  Connect <ArrowRight className="w-3 h-3" />
+                <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-transparent group-hover:text-white transition-all duration-500 transform translate-x-[-10px] group-hover:translate-x-0">
+                  Connect <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
-
-              {/* The Morphing Background Circle */}
-              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-gray-50 rounded-full group-hover:scale-[6] transition-transform duration-700 ease-in-out z-0" />
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
+            </div>
+            
+            {/* Glossy Overlay for Premium Feel */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+          </motion.div>
+        ))}
+      </div>
+    </section>
       {/* --- SPLIT INTERACTIVE SECTION --- */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
+      <section className="py-10 px-6 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-20">
 
           {/* Left: Refined Message Form */}

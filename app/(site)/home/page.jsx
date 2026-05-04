@@ -17,7 +17,7 @@ import {
     HiOutlinePhone,
     HiOutlineLocationMarker,
 } from "react-icons/hi";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { useToast } from "@/app/components/toast/ToastContext";
@@ -214,8 +214,8 @@ export default function Home() {
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900">
             {/* 🎥 Hero Background Video (... existing code ... ) */}
-            {/* ... (Hero section remains the same) ... */}
-            <div className="absolute top-0 left-0 w-full h-[70vh] md:h-[80vh] z-0 overflow-hidden">
+            {/* --- HERO BACKGROUND (Height: 50vh mobile / 60vh desktop) --- */}
+            <div className="absolute top-0 left-0 w-full h-[50vh] md:h-[60vh] z-0 overflow-hidden">
                 {!imageError ? (
                     <video
                         src="/videos/hero-bg.mp4"
@@ -239,10 +239,10 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-blinkblack/80 via-blinkblack/60 to-blinkred/70"></div>
             </div>
 
-            {/* Hero Text Section (.... existing code ....) */}
-            <section className="relative flex flex-col justify-center items-center text-center h-[70vh] md:h-[80vh] px-6 z-10">
+            {/* --- HERO TEXT SECTION (Matches background height exactly) --- */}
+            <section className="relative flex flex-col justify-center items-center text-center h-[50vh] md:h-[60vh] px-6 z-10">
                 <motion.h1
-                    className="text-6xl md:text-7xl font-black text-blinkwhite drop-shadow-2xl mb-6"
+                    className="text-5xl md:text-7xl font-black text-blinkwhite drop-shadow-2xl mb-4"
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
@@ -251,39 +251,39 @@ export default function Home() {
                 </motion.h1>
 
                 <motion.p
-                    className="text-xl md:text-2xl text-gray-200 mt-6 max-w-3xl leading-relaxed"
+                    className="text-lg md:text-2xl text-gray-200 mt-2 max-w-3xl leading-relaxed"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 1 }}
                 >
-                    Your one-stop platform for cleaning, maintenance, and convenience. Experience top-tier services with a touch of innovation.
+                    Your one-stop platform for cleaning, maintenance, and convenience.
                 </motion.p>
+
                 <motion.a
                     href="/services"
-                    className="mt-10 px-10 py-4 bg-gradient-to-r from-blinkred to-blinkblack hover:from-blinkblack hover:to-blinkred text-blinkwhite rounded-full font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105"
+                    className="mt-8 px-10 py-4 bg-gradient-to-r from-blinkred to-blinkblack hover:from-blinkblack hover:to-blinkred text-blinkwhite rounded-full font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
                     Explore Services
                 </motion.a>
-
             </section>
 
-            {/* Services Section - Premium Horizontal Scroll */}
+
             {/* Services Section - Premium Single Row with Images */}
-            <section id="services" className="relative bg-[#0a0a0a] py-24 overflow-hidden">
+            <section id="services" className="relative bg-[#0a0a0a] py-10 overflow-hidden">
 
                 {/* Background Decorative Element */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blinkred/5 rounded-full blur-[120px] -z-10" />
 
-                <div className="max-w-7xl mx-auto px-6 mb-12">
+                <div className="max-w-7xl mx-auto px-6 mb-6 ">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
                         <h2 className="text-5xl md:text-6xl font-black text-white mb-4">
-                            Our <span className="text-blinkred">Expertise</span>
+                            Our <span className="text-blinkred">Services</span>
                         </h2>
                         <div className="h-1 w-20 bg-blinkred"></div>
                     </motion.div>
@@ -369,89 +369,149 @@ export default function Home() {
             </section>
 
             {/* Testimonials Section (UPDATED) */}
-            {/* Testimonials Section - High Energy Red Design */}
-            <section className="relative bg-blinkred py-24 overflow-hidden">
-
-                {/* Abstract Background Shapes for Texture */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                    <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-                    <div className="absolute top-1/2 -right-24 w-80 h-80 bg-black/20 rounded-full blur-3xl" />
+            <section className="relative bg-[#E31E24] py-10 overflow-hidden">
+                {/* Dynamic Background Elements */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-white/10 rounded-full blur-[120px] animate-pulse" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-black/30 rounded-full blur-[100px]" />
+                    {/* Decorative Grid Pattern */}
+                    <div className="absolute inset-0 opacity-[0.05] [mask-image:radial-gradient(ellipse_at_center,black,transparent)]"
+                        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M0 40L40 0H20L0 20M40 40V20L20 40\'/%3E%3C/g%3E%3C/svg%3E")' }}
+                    />
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    {/* Section Header */}
-                    <div className="flex flex-col items-center mb-16">
+                    <div className="relative flex flex-col items-center mb-12 px-6">
+                        {/* Subtle Backdrop Glow */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-10 bg-blinkred/20 blur-[80px] pointer-events-none" />
+
+                        {/* 1. Status Badge - Ultra Slim */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-white text-xs font-bold tracking-widest uppercase mb-4 shadow-sm"
-                        >
-                            Real Stories
-                        </motion.div>
-                        <motion.h2
-                            className="text-5xl md:text-6xl font-black text-center text-white"
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: -10 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 mb-8 shadow-2xl"
                         >
-                            What Our <span className="text-black/40">Clients Say</span>
-                        </motion.h2>
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blinkred opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blinkred"></span>
+                            </span>
+                            <span className="text-white/80 text-[9px] font-black tracking-[0.25em] uppercase italic">
+                                Live Feed
+                            </span>
+                        </motion.div>
+
+                        {/* 2. Main Title - Kinetic Typography style */}
+                        <div className="relative max-w-4xl text-center">
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                className="text-4xl md:text-6xl font-black text-white leading-[0.95] tracking-tighter uppercase"
+                            >
+                                Loved by <span className="text-white/30">homeowners,</span> <br />
+                                <span className="relative inline-block mt-2">
+                                    <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-br from-white via-white/90 to-blinkred">
+                                        Trusted for excellence.
+                                    </span>
+                                    {/* Decorative Underline Accent */}
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        whileInView={{ width: '100%' }}
+                                        transition={{ delay: 0.5, duration: 1 }}
+                                        className="absolute -bottom-2 left-0 h-[3px] bg-blinkred rounded-full opacity-50"
+                                    />
+                                </span>
+                            </motion.h2>
+                        </div>
+
+                        {/* 3. Review Summary - Horizontal "Metric" Style */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="mt-10 flex items-center gap-4 py-2 px-6 rounded-2xl bg-white/5 border border-white/5"
+                        >
+                            <div className="flex -space-x-2">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="w-6 h-6 rounded-full border-2 border-blinkred bg-gray-800 flex items-center justify-center text-[8px] text-white font-bold">
+                                        ★
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="h-4 w-[1px] bg-white/20" />
+                            <p className="text-white/50 text-[11px] font-bold tracking-tight uppercase">
+                                <span className="text-white">4.9/5 Rating</span>
+                                <span className="mx-2 opacity-30">•</span>
+                                500+ Genuine Reviews
+                            </p>
+                        </motion.div>
                     </div>
 
                     {/* Loading State */}
                     {loadingTestimonials && (
-                        <div className="flex justify-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+                        <div className="flex flex-col items-center justify-center py-20">
+                            <div className="relative w-16 h-16">
+                                <div className="absolute inset-0 border-4 border-white/20 rounded-full"></div>
+                                <div className="absolute inset-0 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            </div>
                         </div>
                     )}
 
-                    {/* Testimonials Grid */}
-                    {!loadingTestimonials && testimonials.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {/* Testimonials Bento Grid */}
+                    {!loadingTestimonials && testimonials?.length > 0 && (
+                        <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 auto-rows-[1fr]">
                             {testimonials.map((t, i) => (
                                 <motion.div
                                     key={i}
-                                    initial={{ opacity: 0, y: 30 }}
+                                    initial={{ opacity: 0, y: 40 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1, duration: 0.5 }}
-                                    whileHover={{ y: -10 }}
-                                    className="flex h-full"
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                    // This logic creates a masonry/bento effect
+                                    className={`group relative flex flex-col justify-between p-8 md:p-10 rounded-[3rem] bg-white/5 backdrop-blur-md border border-white/20 hover:border-white/50 transition-all duration-500 shadow-2xl overflow-hidden
+                                    ${i === 0 ? 'md:col-span-3 lg:col-span-8' :
+                                            i === 1 ? 'md:col-span-3 lg:col-span-4' :
+                                                'md:col-span-3 lg:col-span-4'}
+                                `}
                                 >
-                                    <div className="relative w-full bg-white/10 backdrop-blur-xl border border-white/30 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col justify-between overflow-hidden group">
+                                    {/* Floating Icon */}
+                                    <Quote className="absolute top-8 right-10 text-white/5 group-hover:text-white/10 transition-colors w-24 h-24 rotate-12" />
 
-                                        {/* Corner Accent */}
-                                        <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-[5rem] -mr-8 -mt-8 transition-all group-hover:bg-white/10" />
-
-                                        <div>
-                                            {/* Rating Stars */}
-                                            <div className="flex gap-1 mb-8">
-                                                {[...Array(5)].map((_, idx) => (
-                                                    <Star
-                                                        key={idx}
-                                                        size={18}
-                                                        className={`${idx < t.rating ? 'text-white fill-white' : 'text-white/30'}`}
-                                                    />
-                                                ))}
-                                            </div>
-
-                                            {/* Message */}
-                                            <p className="text-white text-xl font-medium leading-relaxed italic mb-8">
-                                                "{t.message}"
-                                            </p>
+                                    <div className="relative z-10">
+                                        {/* Rating */}
+                                        <div className="flex gap-1 mb-8 bg-black/20 w-fit px-3 py-1.5 rounded-full border border-white/5">
+                                            {[...Array(5)].map((_, idx) => (
+                                                <Star
+                                                    key={idx}
+                                                    size={14}
+                                                    className={`${idx < t.rating ? 'fill-white text-white' : 'text-white/20'}`}
+                                                />
+                                            ))}
                                         </div>
 
-                                        {/* User Info */}
-                                        <div className="flex items-center gap-4 border-t border-white/20 pt-8">
-                                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-blinkred font-black text-xl shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
+                                        {/* Message */}
+                                        <blockquote className={`text-white font-bold leading-tight tracking-tight mb-12 
+                                        ${i === 0 ? 'text-2xl md:text-4xl' : 'text-xl'}
+                                    `}>
+                                            "{t.message}"
+                                        </blockquote>
+                                    </div>
+
+                                    {/* Author Info */}
+                                    <div className="flex items-center gap-5 relative z-10">
+                                        <div className="relative">
+                                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[#E31E24] font-black text-2xl rotate-3 group-hover:rotate-0 transition-transform duration-300">
                                                 {t.name.charAt(0)}
                                             </div>
-                                            <div>
-                                                <h4 className="text-white font-extrabold text-lg tracking-tight leading-none uppercase">
-                                                    {t.name}
-                                                </h4>
-                                                <p className="text-white/60 text-xs font-bold mt-1 tracking-wider uppercase">
-                                                    {t.role || "Verified Client"}
-                                                </p>
-                                            </div>
+                                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 border-4 border-[#E31E24] rounded-full shadow-lg" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-white font-black text-lg uppercase leading-none tracking-tight">
+                                                {t.name}
+                                            </h4>
+                                            <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-1">
+                                                {t.role || "Verified Partner"}
+                                            </p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -461,152 +521,240 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Subscription Section - Premium Tiered Design */}
-            <section id="pricing" className="relative bg-[#f8f9fa] py-24 overflow-hidden">
+            {/* Subscription Section - Modern Glassmorphism Design */}
+            <section id="pricing" className="relative bg-white py-10 overflow-hidden">
 
-                {/* Decorative background glow */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blinkred/5 rounded-full blur-[120px] -z-10" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gray-200 rounded-full blur-[120px] -z-10" />
+                {/* Background Decorative Blurs */}
+                <div className="absolute top-0 -left-20 w-[600px] h-[600px] bg-blinkred/5 rounded-full blur-[120px] -z-10" />
+                <div className="absolute bottom-0 -right-20 w-[600px] h-[600px] bg-blinkred/10 rounded-full blur-[150px] -z-10 animate-pulse" />
 
                 <div className="max-w-7xl mx-auto px-6">
-                    <motion.div
-                        className="text-center mb-20"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <span className="text-blinkred font-bold tracking-[0.2em] uppercase text-sm">Transparent Pricing</span>
-                        <h2 className="text-5xl md:text-6xl font-black text-gray-900 mt-4 mb-6">
-                            Choose Your <span className="text-blinkred">Freedom.</span>
-                        </h2>
-                        <p className="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
-                            Unlock long-term peace of mind with our subscription tiers.
-                            Enjoy <span className="text-gray-900 font-bold">priority staffing</span> and significant savings.
-                        </p>
-                    </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                    {/* Compact, Premium Header */}
+                    <div className="flex flex-col items-center text-center mb-10">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            className="px-4 py-1.5 rounded-full bg-blinkred/5 border border-blinkred/20 text-blinkred text-[10px] font-black tracking-[0.3em] uppercase mb-6"
+                        >
+                            Pricing Strategy
+                        </motion.div>
+                        <motion.h2
+                            className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                        >
+                            Invest in <span className="italic font-serif text-blinkred">Reliability.</span>
+                        </motion.h2>
+                        <motion.p
+                            className="mt-6 text-gray-500 text-lg max-w-xl font-medium"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            Professional staffing solutions tailored for long-term peace of mind.
+                            Save up to 20% with our annual plans.
+                        </motion.p>
+                    </div>
+
+                    {/* Pricing Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
                             {
                                 duration: "3 Months",
-                                tagline: "Essential Plan",
+                                tagline: "Essential Support",
                                 price: 5999,
-                                features: [
-                                    "1 Free Replacement",
-                                    "10% Monthly Salary Discount",
-                                    "24/7 Support",
-                                ],
-                                popular: false,
+                                features: ["1 Free Replacement", "Priority Staffing", "24/7 Dedicated Support"],
+                                popular: false
                             },
                             {
                                 duration: "6 Months",
-                                tagline: "Most Recommended",
+                                tagline: "Family Choice",
                                 price: 11999,
-                                features: [
-                                    "1 Free Replacement",
-                                    "10% Monthly Salary Discount",
-                                    "24/7 Support",
-                                ],
-                                popular: true,
+                                features: ["2 Free Replacements", "10% Salary Discount", "Premium Candidate Pool", "24/7 Support"],
+                                popular: true
                             },
                             {
                                 duration: "12 Months",
-                                tagline: "Best Value",
+                                tagline: "Ultimate Peace",
                                 price: 19999,
-                                features: [
-                                    "1 Free Replacement",
-                                    "10% Monthly Salary Discount",
-                                    "24/7 Support",
-                                ],
-                                popular: false,
-                            },
+                                features: ["Unlimited Replacements", "15% Salary Discount", "Background Verifications", "Direct Manager Support"],
+                                popular: false
+                            }
                         ].map((plan, index) => (
                             <motion.div
                                 key={index}
-                                className={`relative group p-[2px] rounded-[2.5rem] transition-all duration-500 ${plan.popular ? 'bg-gradient-to-b from-blinkred to-pink-500 scale-105 z-10 shadow-2xl' : 'bg-gray-200 hover:bg-gray-300'
-                                    }`}
-                                initial={{ opacity: 0, y: 40 }}
+                                initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                whileHover={{ y: -20 }}
                                 transition={{ delay: index * 0.1 }}
+                                whileHover={{ y: -10 }}
+                                className={`relative group h-full rounded-[2.5rem] p-8 border transition-all duration-500 ${plan.popular
+                                    ? 'bg-zinc-900 text-white border-zinc-800 shadow-2xl scale-105 z-10'
+                                    : 'bg-white text-gray-900 border-gray-100 hover:border-blinkred/30 shadow-sm'
+                                    }`}
                             >
-                                {/* Internal Card */}
-                                <div className="bg-white rounded-[2.4rem] p-10 h-full flex flex-col relative overflow-hidden">
-
-                                    {plan.popular && (
-                                        <div className="absolute top-0 right-0 bg-blinkred text-white text-[10px] font-black px-6 py-2 rounded-bl-2xl uppercase tracking-tighter">
-                                            Best Seller
-                                        </div>
-                                    )}
-
-                                    <div className="mb-8">
-                                        <h3 className="text-sm font-bold text-blinkred uppercase tracking-widest mb-2">{plan.tagline}</h3>
-                                        <p className="text-4xl font-black text-gray-900">{plan.duration}</p>
+                                {/* Best Seller Badge */}
+                                {plan.popular && (
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blinkred text-white text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-widest shadow-lg">
+                                        Most Popular
                                     </div>
+                                )}
 
-                                    <div className="flex items-baseline gap-1 mb-8">
-                                        <span className="text-4xl font-black text-gray-900">₹{plan.price.toLocaleString()}</span>
-                                        <span className="text-gray-400 font-medium text-sm">/flat</span>
+                                {/* Card Header */}
+                                <div className="mb-10">
+                                    <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${plan.popular ? 'text-blinkred' : 'text-gray-400'}`}>
+                                        {plan.tagline}
+                                    </p>
+                                    <h3 className="text-4xl font-bold tracking-tighter">{plan.duration}</h3>
+                                </div>
+
+                                {/* Pricing */}
+                                <div className="mb-10">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-5xl font-black">₹{plan.price.toLocaleString()}</span>
+                                        <span className={`text-sm font-medium ${plan.popular ? 'text-gray-500' : 'text-gray-400'}`}>/plan</span>
                                     </div>
+                                </div>
 
-                                    <div className="h-px w-full bg-gray-100 mb-8" />
+                                {/* Feature List */}
+                                <ul className="space-y-4 mb-12 flex-grow">
+                                    {plan.features.map((feature, i) => (
+                                        <li key={i} className="flex items-center gap-3 text-sm font-medium">
+                                            <div className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${plan.popular ? 'bg-blinkred/20 text-blinkred' : 'bg-gray-100 text-blinkred'}`}>
+                                                <HiOutlineCheckCircle size={14} />
+                                            </div>
+                                            <span className={plan.popular ? 'text-gray-300' : 'text-gray-600'}>{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
 
-                                    <ul className="space-y-5 mb-10 flex-grow">
-                                        {plan.features.map((feature, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-gray-600 font-medium text-sm">
-                                                <div className={`p-1 rounded-full ${plan.popular ? 'bg-blinkred/10 text-blinkred' : 'bg-gray-100 text-gray-400'}`}>
-                                                    <HiOutlineCheckCircle size={18} />
-                                                </div>
-                                                {feature}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                {/* CTA Button */}
+                                <motion.button
+                                    whileTap={{ scale: 0.95 }}
+                                    className={`w-full py-4 rounded-2xl font-bold text-sm tracking-widest uppercase transition-all duration-300 ${plan.popular
+                                        ? 'bg-blinkred text-white hover:bg-white hover:text-black'
+                                        : 'bg-gray-900 text-white hover:bg-blinkred'
+                                        }`}
+                                >
+                                    Get Started
+                                </motion.button>
+
+                                {/* Subtle Background Icon */}
+                                <div className="absolute -bottom-6 -right-6 opacity-[0.03] pointer-events-none group-hover:opacity-[0.07] transition-opacity">
+                                    <HiOutlineCheckCircle size={150} />
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Bottom Trust Badge */}
+                    <motion.p
+                        className="text-center mt-16 text-gray-400 text-xs font-bold uppercase tracking-widest"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                    >
+                        All plans include a <span className="text-gray-900">100% Satisfaction Guarantee</span>
+                    </motion.p>
                 </div>
             </section>
 
-            {/* Second Video Section with Fallback */}
-            <section className="relative h-[70vh] flex items-center justify-center">
-                {!video2Error ? (
-                    <video
-                        src={bgClip2}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        poster={fallbackBg}
-                        onError={() => setVideo2Error(true)}
-                        className="absolute inset-0 w-full h-full object-cover"
-                    />
-                ) : (
-                    <Image
-                        src={fallbackBg}
-                        alt="Fallback Background"
-                        fill
-                        className="object-cover"
-                    />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-r from-blinkblack to-blinkred/70"></div>
-                <motion.div
-                    className="relative z-10 text-center text-blinkwhite"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <h2 className="text-4xl font-bold mb-4">Reliable. Smart. Clean.</h2>
-                    <p className="text-lg max-w-xl mx-auto">
-                        BlinkMaid — simplifying your cleaning experience through modern technology and trusted professionals.
-                    </p>
-                    <a
-                        href="#contact"
-                        className="mt-6 inline-block px-8 py-3 bg-blinkred hover:bg-blinkred/80 text-blinkwhite rounded-full font-semibold shadow-lg transition"
-                    >
-                        Get Started
-                    </a>
-                </motion.div>
+            {/* Cinematic Video Section - Premium Layout */}
+            <section className="relative h-[80vh] flex items-center overflow-hidden">
+                {/* Video/Image Layer */}
+                <div className="absolute inset-0 z-0">
+                    {!video2Error ? (
+                        <video
+                            src={bgClip2}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            poster={fallbackBg}
+                            onError={() => setVideo2Error(true)}
+                            className="w-full h-full object-cover scale-105" // Slight scale for a zoom effect
+                        />
+                    ) : (
+                        <Image
+                            src={fallbackBg}
+                            alt="Fallback Background"
+                            fill
+                            className="object-cover"
+                        />
+                    )}
+                    {/* Advanced Multi-layered Overlay */}
+                    <div className="absolute inset-0 bg-black/40" /> {/* Darken for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" /> {/* Side fade */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" /> {/* Bottom shadow */}
+                </div>
+
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="max-w-4xl">
+                        {/* Minimalist Pill Label */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            className="flex items-center gap-3 mb-8"
+                        >
+                            <div className="h-[1px] w-12 bg-blinkred" />
+                            <span className="text-white/80 text-[11px] font-black tracking-[0.4em] uppercase">
+                                The Modern Standard
+                            </span>
+                        </motion.div>
+
+                        {/* High-End Typography Header */}
+                        <motion.h2
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="text-6xl md:text-8xl font-bold text-white leading-[0.9] tracking-tighter mb-8"
+                        >
+                            Reliable. <br />
+                            Smart. <span className="text-blinkred italic font-serif">Clean.</span>
+                        </motion.h2>
+
+                        {/* Description with refined width and line-height */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="text-gray-300 text-lg md:text-xl max-w-lg leading-relaxed mb-10 font-medium"
+                        >
+                            BlinkMaid simplifies your cleaning experience through <span className="text-white font-bold">modern technology</span> and a curated network of trusted professionals.
+                        </motion.p>
+
+                        {/* Premium Button with Glassmorphism interaction */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex flex-wrap gap-4"
+                        >
+                            <a
+                                href="#contact"
+                                className="group relative px-10 py-5 bg-blinkred overflow-hidden rounded-full transition-all duration-300"
+                            >
+                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                                <span className="relative z-10 text-white font-black text-xs uppercase tracking-widest">
+                                    Start Your Journey
+                                </span>
+                            </a>
+
+                            {/* Secondary 'Watch' Button for "Well-Designed" feel */}
+                            <button className="flex items-center gap-3 px-8 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full hover:bg-white/10 transition-all">
+                                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
+                                    <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[7px] border-l-black border-b-[4px] border-b-transparent ml-0.5" />
+                                </div>
+                                <span className="text-white font-bold text-[10px] uppercase tracking-widest">How it works</span>
+                            </button>
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Elegant Scroll Indicator - The "Designer" touch */}
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+                    <span className="text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">Scroll</span>
+                    <div className="w-[1px] h-12 bg-gradient-to-b from-white/40 to-transparent" />
+                </div>
             </section>
 
 
@@ -699,7 +847,7 @@ export default function Home() {
                                         <option className="bg-[#222222]">Cooking</option>
                                         <option className="bg-[#222222]">Baby Care</option>
                                         <option className="bg-[#222222]">Senior Care</option>
-                                                                                <option className="bg-[#222222]">Other</option>
+                                        <option className="bg-[#222222]">Other</option>
                                     </select>
                                 </div>
 
@@ -782,79 +930,174 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+{/* Premium Brand Section - blinkred Background */}
+<section className="relative bg-blinkred py-24 overflow-hidden">
+    
+    {/* Subtle Texture Overlay for Professional Depth */}
+    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none" />
+    
+    {/* Soft Glow to prevent the red from looking "flat" */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)] pointer-events-none" />
 
+    <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            
+            {/* Left side: High-contrast typography */}
+            <div className="max-w-2xl">
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    className="flex items-center gap-2 mb-6"
+                >
+                    <span className="h-[1px] w-8 bg-white/60" />
+                    <span className="text-white/80 text-[10px] font-black tracking-[0.4em] uppercase">
+                        Premium Quality
+                    </span>
+                </motion.div>
+                
+                <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] mb-8"
+                >
+                    Experience the <br />
+                    <span className="italic font-serif text-black/20">Blink Standard.</span>
+                </motion.h2>
+            </div>
+
+            {/* Right side: Compact Stats / Trust Box */}
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] md:w-80 shadow-2xl"
+            >
+                <div className="space-y-6">
+                    <div>
+                        <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Success Rate</p>
+                        <h4 className="text-4xl font-black text-white">99.9%</h4>
+                    </div>
+                    <div className="h-[1px] w-full bg-white/10" />
+                    <div>
+                        <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Response Time</p>
+                        <h4 className="text-4xl font-black text-white">Instant</h4>
+                    </div>
+                    
+                    <button className="w-full py-4 bg-white text-blinkred rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300">
+                        Book Now
+                    </button>
+                </div>
+            </motion.div>
+
+        </div>
+    </div>
+</section>
             {/* Contact Section - Premium Location & Contact Info */}
-            <section id="contact-info" className="relative bg-white pb-24 overflow-hidden">
-                {/* Soft background glow */}
-                <div className="absolute top-1/2 left-0 w-72 h-72 bg-blinkred/5 rounded-full blur-[120px] -z-10" />
+     {/* Contact Section - Boutique Concierge Design */}
+<section id="contact-info" className="relative bg-white py-10 overflow-hidden">
+    
+    {/* Minimalist Background Accents */}
+    <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-50/50 -z-10" />
+    <div className="absolute -top-24 -left-24 w-96 h-96 bg-blinkred/5 rounded-full blur-[120px] -z-10" />
 
-                <div className="max-w-7xl mx-auto px-6 relative">
+    <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col lg:flex-row gap-20">
+            
+            {/* Left Column: Brand Statement */}
+            <div className="lg:w-1/3">
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <span className="text-blinkred text-[10px] font-black tracking-[0.4em] uppercase mb-6 block">
+                        Available 24/7
+                    </span>
+                    <h2 className="text-5xl md:text-6xl font-bold text-gray-900 leading-[0.9] tracking-tighter mb-8">
+                        Let’s start a <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blinkred to-pink-600 italic font-serif">
+                            conversation.
+                        </span>
+                    </h2>
+                    <p className="text-gray-500 text-lg font-medium leading-relaxed mb-10">
+                        Whether you need a dedicated professional or a quick consultation, our concierge team is ready to assist you.
+                    </p>
+                    
+                    {/* Social/Trust Indicator */}
+                    <div className="pt-10 border-t border-gray-100">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Official Channels</p>
+                        <div className="flex gap-4">
+                            {['Instagram', 'LinkedIn', 'WhatsApp'].map((social) => (
+                                <span key={social} className="text-sm font-bold text-gray-900 hover:text-blinkred cursor-pointer transition-colors">
+                                    {social}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Right Column: Contact Cards */}
+            <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                    {
+                        icon: <HiOutlineMail size={24} />,
+                        title: "Email Support",
+                        detail: "support@blinkmaid.com",
+                        sub: "Expert assistance in < 2 hrs",
+                        color: "bg-blue-500"
+                    },
+                    {
+                        icon: <HiOutlinePhone size={24} />,
+                        title: "Priority Line",
+                        detail: "+91 93804 19755",
+                        sub: "Available Mon - Sun, 9am - 9pm",
+                        color: "bg-blinkred"
+                    },
+                    {
+                        icon: <HiOutlineLocationMarker size={24} />,
+                        title: "Bengaluru HQ",
+                        detail: "Telecom Layout, Thanisandra",
+                        sub: "No. 33, Shop 01, PIN 560077",
+                        color: "bg-zinc-900",
+                        wide: true
+                    }
+                ].map((item, idx) => (
                     <motion.div
-                        className="text-center mb-16"
+                        key={idx}
+                        className={`group relative p-8 rounded-[2rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] ${item.wide ? 'md:col-span-2' : ''}`}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ delay: idx * 0.1 }}
                     >
-                        <span className="text-blinkred font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Get In Touch</span>
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900">
-                            Contact <span className="text-blinkred">Us</span>
-                        </h2>
+                        <div className="flex items-start justify-between mb-12">
+                            <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500">
+                                {item.icon}
+                            </div>
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="w-2 h-2 rounded-full bg-blinkred animate-ping" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">
+                                {item.title}
+                            </h3>
+                            <p className="text-xl font-bold text-gray-900 group-hover:text-blinkred transition-colors duration-300">
+                                {item.detail}
+                            </p>
+                            <p className="mt-2 text-sm text-gray-500 font-medium">
+                                {item.sub}
+                            </p>
+                        </div>
+
+                        {/* Subtle interactive line */}
+                        <div className="absolute bottom-0 left-8 right-8 h-[2px] bg-gray-50 group-hover:bg-blinkred transition-all duration-500 scale-x-0 group-hover:scale-x-100 transform origin-left" />
                     </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                icon: <HiOutlineMail size={32} />,
-                                title: "Email Support",
-                                detail: "support@blinkmaid.com",
-                                sub: "Response within 2 hours"
-                            },
-                            {
-                                icon: <HiOutlinePhone size={32} />,
-                                title: "Call Anytime",
-                                detail: "+91 93804 19755",
-                                sub: "Mon - Sun, 9am - 9pm"
-                            },
-                            {
-                                icon: <HiOutlineLocationMarker size={32} />,
-                                title: "Our Headquarters",
-                                detail: "No. 33, Shop No.01, Telecom Layout Main Road,",
-                                sub: "Ashwathnagar, Thanisandra, Bengaluru-560077"
-                            }
-                        ].map((item, idx) => (
-                            <motion.div
-                                key={idx}
-                                className="group bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-500 text-center relative overflow-hidden"
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: idx * 0.1 }}
-                                whileHover={{ y: -10 }}
-                            >
-                                {/* Animated Background Accent */}
-                                <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-blinkred/5 rounded-full group-hover:scale-[2] transition-transform duration-700" />
-
-                                <div className="relative z-10">
-                                    <div className="w-20 h-20 bg-gray-50 text-blinkred rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:bg-blinkred group-hover:text-white transition-all duration-300 shadow-inner">
-                                        {item.icon}
-                                    </div>
-
-                                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-3">
-                                        {item.title}
-                                    </h3>
-
-                                    <p className="text-lg font-bold text-gray-900 leading-tight mb-2 group-hover:text-blinkred transition-colors">
-                                        {item.detail}
-                                    </p>
-
-                                    <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                                        {item.sub}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
 
         </div>
     );

@@ -13,6 +13,8 @@ import {
   RefreshCw,
   List,
   Star,
+  MapPin,    // Added for Cities
+  Inbox      // Added for Contact Inbox
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -26,14 +28,18 @@ export default function AdminSidebar() {
 
   const links = [
     { href: "/admin/dashboard", label: "Dashboard", icon: Home },
+    // --- New Links Added Below ---
+    { href: "/admin/Citie", label: "Manage Cities", icon: MapPin },
+    { href: "/admin/admin-services", label: "City Services", icon: Building2 },
+    { href: "/admin/admin-services/list", label: "List Services", icon: List },
+    { href: "/admin/service-bookings", label: "Service Bookings", icon: BookOpenCheck },
+    // -----------------------------
     { href: "/admin/maids", label: "Maid Registrations", icon: Users },
     { href: "/admin/maid-change", label: "Maid Change", icon: RefreshCw },
     { href: "/admin/website-reviews", label: "Website Reviews", icon: Star },
     { href: "/admin/enquiries", label: "Enquiries", icon: ClipboardList },
-    { href: "/admin/admin-services", label: "City Services", icon: Building2 },
-    { href: "/admin/admin-services/list", label: "List Services", icon: List},
+    { href: "/admin/ContactInbox", label: "Contact Inbox", icon: Inbox },
 
-    { href: "/admin/service-bookings", label: "Service Bookings", icon: BookOpenCheck },
     { href: "/admin/user-display", label: "User Details", icon: Users },
   ];
 
@@ -57,8 +63,8 @@ export default function AdminSidebar() {
         </h2>
       </div>
 
-      {/* Navigation (NO SCROLL) */}
-      <nav className="flex flex-col px-4 py-6 space-y-2 flex-1 overflow-hidden">
+      {/* Navigation (Added overflow-y-auto to handle the growing list of links) */}
+      <nav className="flex flex-col px-4 py-6 space-y-2 flex-1 overflow-y-auto custom-scrollbar">
         {links.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href;
 

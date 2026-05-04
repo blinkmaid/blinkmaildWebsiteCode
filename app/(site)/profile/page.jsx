@@ -8,6 +8,7 @@ import {
   Calendar, CreditCard, CheckCircle, XCircle, RefreshCw,
   ShieldCheck, ArrowRight, Star
 } from "lucide-react";
+import { useToast } from "@/app/components/toast/ToastContext";
 
 // Constants
 const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RpvE2nM5XUTYN7";
@@ -35,7 +36,8 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(false);
-  
+  const { showToast } = useToast();
+
   // Modal & Payment States
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -112,6 +114,54 @@ export default function ProfilePage() {
     }
     setSaving(false);
   };
+
+const handleChangeMaid = async () => {
+  if (!selectedBooking || !newMaid || !changeReason) {
+    showToast("warning", "Please fill all fields");
+    return;
+  }
+
+  setUpdatingMaid(true);
+
+  try {
+    const { error: changeError } = await supabase
+      .from("maid_changes")
+      .insert([
+        {
+          booking_id: selectedBooking.id,
+          previous_maid_id: selectedBooking.maid_id || null,
+          change_reason: changeReason,
+          changed_by: userData.id,
+        },
+      ]);
+
+    if (changeError) throw changeError;
+
+    const { error: bookingError } = await supabase
+      .from("bookings")
+      .update({ maid_id: newMaid })
+      .eq("id", selectedBooking.id);
+
+    if (bookingError) throw bookingError;
+
+    showToast("success", "Maid updated successfully");
+
+    setIsModalOpen(false);
+    setNewMaid("");
+    setChangeReason("");
+    setSelectedBooking(null);
+    fetchBookings(userData.id);
+  } catch (err) {
+    console.error("CHANGE MAID ERROR 👉", err);
+    showToast(
+      "error",
+      err.message || "Failed to change maid. Please try again."
+    );
+  } finally {
+    setUpdatingMaid(false);
+  }
+};
+
 
   const handleRazorpaySubscription = async (plan) => {
     if (paymentProcessing) return;
@@ -565,7 +615,17 @@ function renderSubscriptionsTab() {
             </div>
             <div className="flex gap-3 pt-4">
               <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 text-slate-600 font-bold">Discard</button>
-              <button className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-700">Update Now</button>
+<button
+  onClick={handleChangeMaid}
+  disabled={updatingMaid}
+  className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-700 disabled:opacity-50 flex items-center justify-center gap-2"
+>
+  {updatingMaid ? (
+    <RefreshCw className="animate-spin" size={18} />
+  ) : (
+    "Update Now"
+  )}
+</button>
             </div>
           </div>
         </motion.div>

@@ -205,7 +205,7 @@ export default function Navbar() {
     const amountInPaise = Math.round(Number(plan.price.replace(/,/g, '')) * 100);
 
     const options = {
-      key: "rzp_test_RpvE2nM5XUTYN7",
+      key: "rzp_test_SlDl2RlSCBfONB",
       amount: amountInPaise, // now correct
       currency: "INR",
       name: "Blinkmaid",
@@ -234,8 +234,12 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white/80 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+<header
+  className={`fixed top-0 left-0 w-full z-50 border-b border-gray-100 transition-all
+    ${menuOpen ? "bg-white" : "bg-white/80 backdrop-blur-md"}
+  `}
+>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 md:h-24 flex items-center justify-between">
           <Link href="/" className="relative group">
             <Image src={logo} alt="Logo" width={160} height={50} className="transition-transform duration-500 group-hover:scale-105" />
           </Link>
@@ -322,6 +326,68 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed inset-0 bg-white opacity-100 z-[90] p-6 flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <Image src={logo} alt="Logo" width={140} />
+                <button onClick={() => setMenuOpen(false)}>
+                  <HiX size={28} />
+                </button>
+              </div>
+
+              <nav className="flex flex-col gap-6">
+                {menuItems.map(({ label, path }) => (
+                  <Link
+                    key={path}
+                    href={path}
+                    onClick={() => setMenuOpen(false)}
+                    className={`text-xl font-black uppercase tracking-tight ${pathname === path ? "text-blinkred" : "text-gray-700"
+                      }`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="mt-auto pt-10">
+                {!user && (
+                  <button
+                    onClick={() => {
+                      setModalOpen(true);
+                      setMenuOpen(false);
+                    }}
+                    className="
+  w-full 
+  py-5 
+  text-lg 
+  bg-blinkblack 
+  text-white 
+  rounded-full 
+  font-black 
+  uppercase 
+  tracking-[0.25em]
+  shadow-2xl
+  hover:bg-blinkred
+  transition-all
+"
+                  >
+                    Get Started
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
       </header>
 
       {/* Subscription Status Banner */}
@@ -333,7 +399,7 @@ export default function Navbar() {
               ? 'bg-red-600'
               : 'bg-blinkred'
             } text-white py-2 overflow-hidden shadow-lg`}>
-            <div className="flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
+            <div className="flex flex-wrap items-center justify-center gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-center px-3">
               {loadingSubscribers ? (
                 <Loader2 className="animate-spin" size={14} />
               ) : subscribers.length > 0 ? (
@@ -375,7 +441,7 @@ export default function Navbar() {
               <button onClick={() => setModalOpen(false)} className="absolute right-8 top-8 text-gray-400 hover:text-blinkred"><X size={24} /></button>
               <div className="text-center mb-10">
                 <h2 className="text-4xl font-black tracking-tighter uppercase mb-2">
-                  {isRegister ? "Join" : "Enter"} <span className="text-blinkred italic">Blink.</span>
+                  {isRegister ? "Join" : "Enter"} <span className="text-blinkred italic">BlinkMaid.</span>
                 </h2>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Premium Domestic Solutions</p>
               </div>

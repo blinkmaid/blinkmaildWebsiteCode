@@ -423,7 +423,7 @@ export default function ServiceBookingFlow() {
                     whileTap={{ scale: 0.95 }}
                   >
                     <img
-                      src={city.image}
+                      src={city.image_url}
                       className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-110"
                       alt={city.name}
                       loading="lazy"

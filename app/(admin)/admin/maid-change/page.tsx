@@ -41,7 +41,7 @@ export default function MaidChangeDashboard() {
     const { data, error } = await supabase
       .from("maid_changes")
       .select("*")
-      .order("changed_at", { ascending: false });
+      .order("created_at", { ascending: false }); // Changed from changed_at
     if (!error) setRequests(data || []);
     setLoading(false);
   };
@@ -67,7 +67,7 @@ export default function MaidChangeDashboard() {
 
   // Filtered requests
   const filteredRequests = requests.filter((r) =>
-    [r.booking_id, r.new_maid_id, r.previous_maid_id, r.change_reason]
+    [r.booking_id, r.previous_maid_id, r.change_reason] // Removed new_maid_id as it's not in your SQL
       .join(" ")
       .toLowerCase()
       .includes(search.toLowerCase())
@@ -233,30 +233,24 @@ export default function MaidChangeDashboard() {
 
                   <tbody>
                     {paginatedRequests.map((r, i) => (
-                      <tr
-                        key={r.id}
-                        className="border-b hover:bg-red-50/40 transition"
-                      >
+                      <tr key={r.id} className="border-b hover:bg-red-50/40 transition">
                         <td className="p-4 font-medium text-gray-700">
                           {(currentPage - 1) * itemsPerPage + i + 1}
                         </td>
-
                         <td className="p-4 text-gray-700">
                           <span className="bg-gray-100 px-3 py-1 rounded-lg text-xs">
                             {r.booking_id}
                           </span>
                         </td>
-
                         <td className="p-4 text-gray-700 font-semibold">
                           {r.previous_maid_id || "N/A"}
                         </td>
-
                         <td className="p-4 text-gray-600 max-w-md">
                           {r.change_reason}
                         </td>
-
                         <td className="p-4 text-gray-500">
-                          {new Date(r.changed_at).toLocaleDateString()}
+                          {/* Use created_at instead of changed_at */}
+                          {r.created_at ? new Date(r.created_at).toLocaleDateString() : "N/A"}
                         </td>
 
                         <td className="p-4">
@@ -400,7 +394,7 @@ export default function MaidChangeDashboard() {
           </div>
         </div>
       )}
-      
+
       {/* Delete Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">

@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',      // This is mandatory for APKs
+  // output: 'export',  // Remove this line
   images: {
-    unoptimized: true,   // Tailwind images need this for static export
+    unoptimized: true,  // Keep if needed for Tailwind images
   },
 };
 
