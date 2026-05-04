@@ -205,7 +205,7 @@ export default function Navbar() {
     const amountInPaise = Math.round(Number(plan.price.replace(/,/g, '')) * 100);
 
     const options = {
-      key: "rzp_test_SlDl2RlSCBfONB",
+      key: "rzp_test_RpvE2nM5XUTYN7",
       amount: amountInPaise, // now correct
       currency: "INR",
       name: "Blinkmaid",

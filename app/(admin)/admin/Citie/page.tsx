@@ -7,19 +7,26 @@ import {
   X, AlertTriangle, Loader2, Upload, ImageIcon, Edit3 
 } from "lucide-react";
 import { useToast } from "@/app/components/toast/ToastContext";
-
+interface City {
+  id: string;
+  name: string;
+  image_url: string | null;
+  created_at: string;
+}
 export default function CitiesDashboard() {
-  const [cities, setCities] = useState([]);
+  const [cities, setCities] = useState<City[]>([]);
+  
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   
+  // 3. (Optional but recommended) Update your editingCity state type as well
+  const [editingCity, setEditingCity] = useState<City | null>(null);
   // Modal States
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   // Form & Selection States
-  const [editingCity, setEditingCity] = useState(null); // Null = Add mode, Object = Edit mode
   const [deleteId, setDeleteId] = useState(null);
   const [cityName, setCityName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
