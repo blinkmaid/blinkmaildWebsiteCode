@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { 
-  MapPin, Plus, Trash2, Search, Map, 
-  X, AlertTriangle, Loader2, Upload, ImageIcon, Edit3 
+import {
+  MapPin, Plus, Trash2, Search, Map,
+  X, AlertTriangle, Loader2, Upload, ImageIcon, Edit3
 } from "lucide-react";
 import { useToast } from "@/app/components/toast/ToastContext";
 interface City {
@@ -15,21 +15,21 @@ interface City {
 }
 export default function CitiesDashboard() {
   const [cities, setCities] = useState<City[]>([]);
-  
+
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  
+
   // 3. (Optional but recommended) Update your editingCity state type as well
   const [editingCity, setEditingCity] = useState<City | null>(null);
   // Modal States
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
+
   // Form & Selection States
   const [cityName, setCityName] = useState("");
-const [deleteId, setDeleteId] = useState<string | null>(null);
-const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { showToast } = useToast();
 
   const fetchCities = async () => {
@@ -42,12 +42,12 @@ const [selectedFile, setSelectedFile] = useState<File | null>(null);
   useEffect(() => { fetchCities(); }, []);
 
   // Open Modal for Edit
-const handleEditClick = (city: City) => {
-  setEditingCity(city);
-  setCityName(city.name);
-  setSelectedFile(null); // Reset file input
-  setShowAddModal(true);
-};
+  const handleEditClick = (city: City) => {
+    setEditingCity(city);
+    setCityName(city.name);
+    setSelectedFile(null); // Reset file input
+    setShowAddModal(true);
+  };
 
   // Open Modal for Add
   const handleAddClick = () => {
@@ -57,7 +57,7 @@ const handleEditClick = (city: City) => {
     setShowAddModal(true);
   };
 
-  const handleSaveCity = async (e) => {
+  const handleSaveCity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cityName.trim()) return;
     setUploading(true);
@@ -77,15 +77,15 @@ const handleEditClick = (city: City) => {
         setUploading(false);
         return;
       }
-      
+
       const { data: { publicUrl } } = supabase.storage.from('city-icons').getPublicUrl(fileName);
       imagePath = publicUrl;
     }
 
     // 2. Insert or Update
     const payload = { name: cityName, image_url: imagePath };
-    
-    const { error } = editingCity 
+
+    const { error } = editingCity
       ? await supabase.from("cities").update(payload).eq("id", editingCity.id)
       : await supabase.from("cities").insert([payload]);
 
@@ -119,7 +119,7 @@ const handleEditClick = (city: City) => {
             <h1 className="text-4xl font-black tracking-tight">Location <span className="opacity-70">Manager</span></h1>
             <p className="text-red-100 mt-1">Manage cities and their display images.</p>
           </div>
-          <button 
+          <button
             onClick={handleAddClick}
             className="bg-white text-red-700 font-bold px-6 py-3 rounded-xl flex items-center gap-2 hover:scale-105 transition-all shadow-md"
           >
@@ -169,13 +169,13 @@ const handleEditClick = (city: City) => {
                     <td className="px-6 py-4 text-gray-500">{new Date(city.created_at).toLocaleDateString()}</td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex justify-center gap-2">
-                        <button 
+                        <button
                           onClick={() => handleEditClick(city)}
                           className="text-blue-500 hover:bg-blue-50 p-2 rounded-lg transition-colors"
                         >
                           <Edit3 size={18} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => { setDeleteId(city.id); setShowDeleteModal(true); }}
                           className="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"
                         >
@@ -204,7 +204,7 @@ const handleEditClick = (city: City) => {
             <form onSubmit={handleSaveCity} className="p-6 space-y-5">
               <div>
                 <label className="text-xs font-bold text-gray-500 uppercase block mb-2">City Name</label>
-                <input 
+                <input
                   required
                   className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-red-500 outline-none bg-gray-50"
                   placeholder="Enter city name..."
@@ -212,14 +212,14 @@ const handleEditClick = (city: City) => {
                   onChange={(e) => setCityName(e.target.value)}
                 />
               </div>
-              
+
               <div>
                 <label className="text-xs font-bold text-gray-500 uppercase block mb-2">
                   {editingCity ? "Change Image (Optional)" : "Display Image"}
                 </label>
                 <div className="relative border-2 border-dashed border-gray-300 rounded-2xl p-4 hover:border-red-400 transition-colors bg-gray-50">
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     accept="image/*"
                     className="absolute inset-0 opacity-0 cursor-pointer"
                     onChange={(e) => setSelectedFile(e.target.files[0])}
@@ -236,9 +236,9 @@ const handleEditClick = (city: City) => {
                 )}
               </div>
 
-              <button 
+              <button
                 disabled={uploading}
-                type="submit" 
+                type="submit"
                 className="w-full bg-red-600 text-white py-4 rounded-2xl font-bold hover:bg-red-700 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
               >
                 {uploading ? <Loader2 className="animate-spin" /> : editingCity ? "Update City" : "Save City Location"}
@@ -260,13 +260,13 @@ const handleEditClick = (city: City) => {
               This action will permanently delete this city. You cannot undo this later.
             </p>
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => setShowDeleteModal(false)}
                 className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={handleDeleteFinal}
                 className="flex-1 px-4 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-95"
               >
