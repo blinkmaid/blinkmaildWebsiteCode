@@ -2,29 +2,47 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { 
-  Mail, Phone, User, MessageSquare, 
-  CheckCircle2, Clock, Search, Eye, X, Filter 
+import {
+  Mail, Phone, User, MessageSquare,
+  CheckCircle2, Clock, Search, Eye, X, Filter
 } from "lucide-react";
 import { useToast } from "@/app/components/toast/ToastContext";
+// 1. Define the shape of your data
+interface ContactEnquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  status: string;
+  created_at: string;
+}
 
 export default function ContactsAdmin() {
-  const [contacts, setContacts] = useState([]);
+  // 2. Assign the interface to the state
+  const [contacts, setContacts] = useState<ContactEnquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("All"); // Tabs: All, Pending, Done
-  const [selectedContact, setSelectedContact] = useState(null);
+  const [activeTab, setActiveTab] = useState("All");
+  // 3. Type the selected contact state as well
+  const [selectedContact, setSelectedContact] = useState<ContactEnquiry | null>(null);
+  
   const { showToast } = useToast();
 
   const fetchContacts = async () => {
     setLoading(true);
+    // TypeScript will now correctly map 'data' to ContactEnquiry[]
     const { data, error } = await supabase
       .from("contacts")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error) setContacts(data || []);
+    
+    if (!error && data) {
+      setContacts(data as ContactEnquiry[]);
+    }
     setLoading(false);
   };
+  
 
   useEffect(() => { fetchContacts(); }, []);
 
@@ -43,9 +61,9 @@ export default function ContactsAdmin() {
 
   // 🔹 Filtering Logic (Search + Tabs)
   const filteredContacts = contacts.filter((c) => {
-    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || 
-                         c.email.toLowerCase().includes(search.toLowerCase());
-    
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.email.toLowerCase().includes(search.toLowerCase());
+
     if (activeTab === "All") return matchesSearch;
     return matchesSearch && c.status === activeTab;
   });
@@ -64,11 +82,10 @@ export default function ContactsAdmin() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
-                  activeTab === tab 
-                  ? "bg-white text-red-800 shadow-lg" 
-                  : "text-white hover:bg-white/10"
-                }`}
+                className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === tab
+                    ? "bg-white text-red-800 shadow-lg"
+                    : "text-white hover:bg-white/10"
+                  }`}
               >
                 {tab}
               </button>
@@ -83,7 +100,7 @@ export default function ContactsAdmin() {
           <div className="p-6 border-b bg-white flex items-center justify-between">
             <div className="relative w-full max-w-md">
               <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
-              <input 
+              <input
                 type="text"
                 placeholder="Search name or email..."
                 className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-red-500 outline-none transition-all"
@@ -123,26 +140,25 @@ export default function ContactsAdmin() {
                         </p>
                       </td>
                       <td className="px-8 py-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase ${
-                          contact.status === 'Done' 
-                          ? 'bg-green-100 text-green-700' 
-                          : 'bg-amber-100 text-amber-700'
-                        }`}>
-                          {contact.status === 'Done' ? <CheckCircle2 size={12}/> : <Clock size={12}/>}
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase ${contact.status === 'Done'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-amber-100 text-amber-700'
+                          }`}>
+                          {contact.status === 'Done' ? <CheckCircle2 size={12} /> : <Clock size={12} />}
                           {contact.status || 'Pending'}
                         </span>
                       </td>
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-end gap-3">
                           {contact.status !== 'Done' && (
-                            <button 
+                            <button
                               onClick={() => updateStatus(contact.id, 'Done')}
                               className="text-xs font-bold text-green-600 hover:bg-green-50 px-3 py-1.5 rounded-lg transition-all"
                             >
                               Mark as Done
                             </button>
                           )}
-                          <button 
+                          <button
                             onClick={() => setSelectedContact(contact)}
                             className="p-2 bg-gray-50 text-gray-400 group-hover:text-red-600 rounded-xl transition-all"
                           >
@@ -178,7 +194,7 @@ export default function ContactsAdmin() {
                 <X size={24} />
               </button>
             </div>
-            
+
             <div className="p-8 space-y-8">
               <div className="grid grid-cols-2 gap-8">
                 <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
@@ -204,15 +220,15 @@ export default function ContactsAdmin() {
             </div>
 
             <div className="p-8 bg-gray-50 flex gap-4">
-               {selectedContact.status !== 'Done' && (
-                 <button 
+              {selectedContact.status !== 'Done' && (
+                <button
                   onClick={() => { updateStatus(selectedContact.id, 'Done'); setSelectedContact(null); }}
                   className="flex-1 py-4 bg-green-600 text-white rounded-2xl font-black hover:bg-green-700 transition-all shadow-lg shadow-green-100"
-                 >
-                   Mark as Completed
-                 </button>
-               )}
-              <button 
+                >
+                  Mark as Completed
+                </button>
+              )}
+              <button
                 onClick={() => setSelectedContact(null)}
                 className="flex-1 py-4 bg-gray-900 text-white rounded-2xl font-black hover:bg-black transition-all"
               >
