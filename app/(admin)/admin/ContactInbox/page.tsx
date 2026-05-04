@@ -26,7 +26,7 @@ export default function ContactsAdmin() {
   const [activeTab, setActiveTab] = useState("All");
   // 3. Type the selected contact state as well
   const [selectedContact, setSelectedContact] = useState<ContactEnquiry | null>(null);
-  
+
   const { showToast } = useToast();
 
   const fetchContacts = async () => {
@@ -36,18 +36,18 @@ export default function ContactsAdmin() {
       .from("contacts")
       .select("*")
       .order("created_at", { ascending: false });
-    
+
     if (!error && data) {
       setContacts(data as ContactEnquiry[]);
     }
     setLoading(false);
   };
-  
+
 
   useEffect(() => { fetchContacts(); }, []);
 
   // 🔹 Quick Status Update
-  const updateStatus = async (id, newStatus) => {
+  const updateStatus = async (id: string, newStatus: string) => {
     const { error } = await supabase
       .from("contacts")
       .update({ status: newStatus })
@@ -83,8 +83,8 @@ export default function ContactsAdmin() {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === tab
-                    ? "bg-white text-red-800 shadow-lg"
-                    : "text-white hover:bg-white/10"
+                  ? "bg-white text-red-800 shadow-lg"
+                  : "text-white hover:bg-white/10"
                   }`}
               >
                 {tab}
@@ -141,8 +141,8 @@ export default function ContactsAdmin() {
                       </td>
                       <td className="px-8 py-5">
                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase ${contact.status === 'Done'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-amber-100 text-amber-700'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-amber-100 text-amber-700'
                           }`}>
                           {contact.status === 'Done' ? <CheckCircle2 size={12} /> : <Clock size={12} />}
                           {contact.status || 'Pending'}
