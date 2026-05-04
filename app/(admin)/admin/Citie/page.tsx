@@ -27,10 +27,9 @@ export default function CitiesDashboard() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   // Form & Selection States
-  const [deleteId, setDeleteId] = useState(null);
   const [cityName, setCityName] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-
+const [deleteId, setDeleteId] = useState<string | null>(null);
+const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { showToast } = useToast();
 
   const fetchCities = async () => {
@@ -43,12 +42,12 @@ export default function CitiesDashboard() {
   useEffect(() => { fetchCities(); }, []);
 
   // Open Modal for Edit
-  const handleEditClick = (city) => {
-    setEditingCity(city);
-    setCityName(city.name);
-    setSelectedFile(null); // Reset file input
-    setShowAddModal(true);
-  };
+const handleEditClick = (city: City) => {
+  setEditingCity(city);
+  setCityName(city.name);
+  setSelectedFile(null); // Reset file input
+  setShowAddModal(true);
+};
 
   // Open Modal for Add
   const handleAddClick = () => {
