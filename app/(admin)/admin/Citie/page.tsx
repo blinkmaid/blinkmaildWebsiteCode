@@ -222,7 +222,7 @@ export default function CitiesDashboard() {
                     type="file"
                     accept="image/*"
                     className="absolute inset-0 opacity-0 cursor-pointer"
-                    onChange={(e) => setSelectedFile(e.target.files[0])}
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                   />
                   <div className="flex flex-col items-center gap-2 text-gray-500">
                     <Upload size={24} className="text-red-500" />
