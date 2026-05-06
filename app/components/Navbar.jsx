@@ -205,7 +205,7 @@ export default function Navbar() {
     const amountInPaise = Math.round(Number(plan.price.replace(/,/g, '')) * 100);
 
     const options = {
-      key: "rzp_test_RpvE2nM5XUTYN7",
+      key: "rzp_test_SlDl2RlSCBfONB",
       amount: amountInPaise, // now correct
       currency: "INR",
       name: "Blinkmaid",
@@ -417,7 +417,7 @@ export default function Navbar() {
                 )
               ) : (
                 <>
-                  Unprotected Account <ArrowRight size={14} />
+                  Take a subscription to enjoy more benefits. <ArrowRight size={14} />
                   <button onClick={() => setShowSubscribePopup(true)} className="underline decoration-2 underline-offset-4">Upgrade Now</button>
                 </>
               )}

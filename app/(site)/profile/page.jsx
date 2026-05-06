@@ -9,9 +9,9 @@ import {
   ShieldCheck, ArrowRight, Star
 } from "lucide-react";
 import { useToast } from "@/app/components/toast/ToastContext";
-
+import { useRouter } from "next/navigation";
 // Constants
-const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RpvE2nM5XUTYN7";
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_SlDl2RlSCBfONB";
 
 const useRazorpayScript = () => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const useRazorpayScript = () => {
 
 export default function ProfilePage() {
   useRazorpayScript();
-
+  const router = useRouter();
   // State Management
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -115,52 +115,52 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
-const handleChangeMaid = async () => {
-  if (!selectedBooking || !newMaid || !changeReason) {
-    showToast("warning", "Please fill all fields");
-    return;
-  }
+  const handleChangeMaid = async () => {
+    if (!selectedBooking || !newMaid || !changeReason) {
+      showToast("warning", "Please fill all fields");
+      return;
+    }
 
-  setUpdatingMaid(true);
+    setUpdatingMaid(true);
 
-  try {
-    const { error: changeError } = await supabase
-      .from("maid_changes")
-      .insert([
-        {
-          booking_id: selectedBooking.id,
-          previous_maid_id: selectedBooking.maid_id || null,
-          change_reason: changeReason,
-          changed_by: userData.id,
-        },
-      ]);
+    try {
+      const { error: changeError } = await supabase
+        .from("maid_changes")
+        .insert([
+          {
+            booking_id: selectedBooking.id,
+            previous_maid_id: selectedBooking.maid_id || null,
+            change_reason: changeReason,
+            changed_by: userData.id,
+          },
+        ]);
 
-    if (changeError) throw changeError;
+      if (changeError) throw changeError;
 
-    const { error: bookingError } = await supabase
-      .from("bookings")
-      .update({ maid_id: newMaid })
-      .eq("id", selectedBooking.id);
+      const { error: bookingError } = await supabase
+        .from("bookings")
+        .update({ maid_id: newMaid })
+        .eq("id", selectedBooking.id);
 
-    if (bookingError) throw bookingError;
+      if (bookingError) throw bookingError;
 
-    showToast("success", "Maid updated successfully");
+      showToast("success", "Maid updated successfully");
 
-    setIsModalOpen(false);
-    setNewMaid("");
-    setChangeReason("");
-    setSelectedBooking(null);
-    fetchBookings(userData.id);
-  } catch (err) {
-    console.error("CHANGE MAID ERROR 👉", err);
-    showToast(
-      "error",
-      err.message || "Failed to change maid. Please try again."
-    );
-  } finally {
-    setUpdatingMaid(false);
-  }
-};
+      setIsModalOpen(false);
+      setNewMaid("");
+      setChangeReason("");
+      setSelectedBooking(null);
+      fetchBookings(userData.id);
+    } catch (err) {
+      console.error("CHANGE MAID ERROR 👉", err);
+      showToast(
+        "error",
+        err.message || "Failed to change maid. Please try again."
+      );
+    } finally {
+      setUpdatingMaid(false);
+    }
+  };
 
 
   const handleRazorpaySubscription = async (plan) => {
@@ -180,7 +180,7 @@ const handleChangeMaid = async () => {
       });
 
       const orderData = await response.json();
-      
+
       const options = {
         key: RAZORPAY_KEY_ID,
         amount: orderData.amount,
@@ -233,95 +233,110 @@ const handleChangeMaid = async () => {
     }
   };
 
+  const handleRebook = async (b) => {
+    const { data, error } = await supabase
+      .from("services")
+      .select("id")
+      .ilike("name", b.service_name.trim()) // flexible match
+      .single();
+
+    if (error || !data) {
+      showToast("error", "Service not found");
+      return;
+    }
+
+    router.push(`/services/${data.id}`);
+  };
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-slate-900 pb-20 font-sans">
       {/* Hero Header */}
-     {/* --- WELL-DESIGNED HEADER START --- */}
-<div className="relative pb-32 overflow-hidden bg-slate-950">
-  {/* Animated Background Gradients */}
-  <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-    <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-rose-600/20 blur-[120px] rounded-full" />
-    <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
-  </div>
+      {/* --- WELL-DESIGNED HEADER START --- */}
+      <div className="relative pb-32 overflow-hidden bg-slate-950">
+        {/* Animated Background Gradients */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-rose-600/20 blur-[120px] rounded-full" />
+          <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
+        </div>
 
-  <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-24">
-    <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-8">
-      
-      {/* User Info Section */}
-      <div className="flex flex-col md:flex-row items-center md:items-center gap-6 text-center md:text-left">
-        <motion.div 
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="relative"
-        >
-          {/* Avatar with Ring */}
-          <div className="w-32 h-32 rounded-3xl bg-gradient-to-tr from-rose-500 to-rose-400 p-1 shadow-2xl">
-            <div className="w-full h-full rounded-[22px] bg-slate-900 flex items-center justify-center text-4xl font-bold text-white overflow-hidden border-4 border-slate-950">
-              {userData?.avatar ? (
-                <img src={userData.avatar} alt="Profile" className="w-full h-full object-cover" />
-              ) : (
-                userData?.name?.charAt(0)
-              )}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-24">
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-8">
+
+            {/* User Info Section */}
+            <div className="flex flex-col md:flex-row items-center md:items-center gap-6 text-center md:text-left">
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="relative"
+              >
+                {/* Avatar with Ring */}
+                <div className="w-32 h-32 rounded-3xl bg-gradient-to-tr from-rose-500 to-rose-400 p-1 shadow-2xl">
+                  <div className="w-full h-full rounded-[22px] bg-slate-900 flex items-center justify-center text-4xl font-bold text-white overflow-hidden border-4 border-slate-950">
+                    {userData?.avatar ? (
+                      <img src={userData.avatar} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      userData?.name?.charAt(0)
+                    )}
+                  </div>
+                </div>
+                {/* Verified Badge */}
+                <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-1.5 rounded-xl border-4 border-slate-950 shadow-lg">
+                  <ShieldCheck size={20} />
+                </div>
+              </motion.div>
+
+              <div>
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2"
+                >
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+                    {userData?.name}
+                  </h1>
+                  {userData.subscription && (
+                    <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-full text-xs font-bold uppercase tracking-widest">
+                      <Star size={12} fill="currentColor" /> Gold Member
+                    </span>
+                  )}
+                </motion.div>
+                <p className="text-slate-400 font-medium flex items-center justify-center md:justify-start gap-2">
+                  <Mail size={16} className="text-rose-500" /> {userData.email}
+                </p>
+              </div>
             </div>
-          </div>
-          {/* Verified Badge */}
-          <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-1.5 rounded-xl border-4 border-slate-950 shadow-lg">
-            <ShieldCheck size={20} />
-          </div>
-        </motion.div>
 
-        <div>
-          <motion.div 
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2"
-          >
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-              {userData?.name}
-            </h1>
-            {userData.subscription && (
-              <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-full text-xs font-bold uppercase tracking-widest">
-                <Star size={12} fill="currentColor" /> Gold Member
-              </span>
-            )}
-          </motion.div>
-          <p className="text-slate-400 font-medium flex items-center justify-center md:justify-start gap-2">
-            <Mail size={16} className="text-rose-500" /> {userData.email}
-          </p>
+            {/* Quick Stats / Action */}
+            <motion.div
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="hidden lg:flex gap-4"
+            >
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl min-w-[140px]">
+                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Total Bookings</p>
+                <p className="text-white text-2xl font-black">{bookings.length}</p>
+              </div>
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl min-w-[140px]">
+                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Account Status</p>
+                <p className="text-emerald-400 text-2xl font-black">Active</p>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+
+        {/* Decorative Wave Bottom */}
+        <div className="absolute bottom-0 left-0 w-full leading-[0] overflow-hidden">
+          <svg className="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,115,123.67,105.74,182.88,88.74,242.09,71.74,271.86,67.23,321.39,56.44Z" className="fill-[#FDFDFD]"></path>
+          </svg>
         </div>
       </div>
-
-      {/* Quick Stats / Action */}
-      <motion.div 
-        initial={{ x: 20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="hidden lg:flex gap-4"
-      >
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl min-w-[140px]">
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Total Bookings</p>
-          <p className="text-white text-2xl font-black">{bookings.length}</p>
-        </div>
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl min-w-[140px]">
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Account Status</p>
-          <p className="text-emerald-400 text-2xl font-black">Active</p>
-        </div>
-      </motion.div>
-
-    </div>
-  </div>
-
-  {/* Decorative Wave Bottom */}
-  <div className="absolute bottom-0 left-0 w-full leading-[0] overflow-hidden">
-    <svg className="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
-      <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,115,123.67,105.74,182.88,88.74,242.09,71.74,271.86,67.23,321.39,56.44Z" className="fill-[#FDFDFD]"></path>
-    </svg>
-  </div>
-</div>
-{/* --- WELL-DESIGNED HEADER END --- */}
+      {/* --- WELL-DESIGNED HEADER END --- */}
 
       {/* Navigation Tabs */}
       <div className="max-w-4xl mx-auto -mt-8 px-6">
@@ -330,9 +345,8 @@ const handleChangeMaid = async () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all ${
-                activeTab === tab ? "bg-rose-500 text-white shadow-lg shadow-rose-200" : "text-slate-500 hover:bg-slate-50"
-              }`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all ${activeTab === tab ? "bg-rose-500 text-white shadow-lg shadow-rose-200" : "text-slate-500 hover:bg-slate-50"
+                }`}
             >
               {tab === "Profile" && <User size={18} />}
               {tab === "My Bookings" && <Calendar size={18} />}
@@ -381,17 +395,17 @@ const handleChangeMaid = async () => {
           )}
         </div>
         <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <ProfileField label="Full Name" name="name" value={editData.name} icon={<User />} isEditing={isEditing} onChange={(e) => setEditData({...editData, name: e.target.value})} />
-          <ProfileField label="Phone Number" name="phone" value={editData.phone} icon={<Phone />} isEditing={isEditing} onChange={(e) => setEditData({...editData, phone: e.target.value})} />
-          <ProfileField label="Location" name="location" value={editData.location} icon={<MapPin />} isEditing={isEditing} onChange={(e) => setEditData({...editData, location: e.target.value})} />
+          <ProfileField label="Full Name" name="name" value={editData.name} icon={<User />} isEditing={isEditing} onChange={(e) => setEditData({ ...editData, name: e.target.value })} />
+          <ProfileField label="Phone Number" name="phone" value={editData.phone} icon={<Phone />} isEditing={isEditing} onChange={(e) => setEditData({ ...editData, phone: e.target.value })} />
+          <ProfileField label="Location" name="location" value={editData.location} icon={<MapPin />} isEditing={isEditing} onChange={(e) => setEditData({ ...editData, location: e.target.value })} />
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-              <Mail size={14}/> Email Address
+              <Mail size={14} /> Email Address
             </label>
             <div className="p-4 bg-slate-50 rounded-xl text-slate-400 border border-slate-100 italic">{userData.email} (Non-editable)</div>
           </div>
           <div className="md:col-span-2">
-            <ProfileField label="Complete Address" name="address" value={editData.address} icon={<Home />} isEditing={isEditing} textarea onChange={(e) => setEditData({...editData, address: e.target.value})} />
+            <ProfileField label="Complete Address" name="address" value={editData.address} icon={<Home />} isEditing={isEditing} textarea onChange={(e) => setEditData({ ...editData, address: e.target.value })} />
           </div>
         </div>
         {isEditing && (
@@ -427,7 +441,13 @@ const handleChangeMaid = async () => {
                   <div className="flex justify-between text-sm"><span className="text-slate-500">Amount Paid</span> <span className="font-bold text-slate-900">₹{b.final_amount}</span></div>
                   <div className="flex justify-between text-sm"><span className="text-slate-500">City</span> <span className="font-medium text-slate-700">{b.city}</span></div>
                 </div>
-                <button 
+                <button
+                  onClick={() => handleRebook(b)}
+                  className="w-full py-3 mt-2 rounded-xl bg-slate-900 text-white font-bold"
+                >
+                  Re-book Service
+                </button>
+                <button
                   onClick={() => { setSelectedBooking(b); setIsModalOpen(true); }}
                   className="w-full py-3 rounded-xl border border-rose-100 text-rose-600 font-bold hover:bg-rose-50 transition-colors flex items-center justify-center gap-2"
                 >
@@ -441,142 +461,140 @@ const handleChangeMaid = async () => {
     );
   }
 
-function renderSubscriptionsTab() {
-  const plans = [
-    {
-      duration: "3 Months",
-      price: 5999,
-      popular: false,
-      gradient: "from-rose-500 to-pink-500",
-    },
-    {
-      duration: "6 Months",
-      price: 11999,
-      popular: true,
-      gradient: "from-indigo-500 to-purple-500",
-    },
-    {
-      duration: "1 Year",
-      price: 19999,
-      popular: false,
-      gradient: "from-slate-700 to-slate-900",
-    },
-  ];
+  function renderSubscriptionsTab() {
+    const plans = [
+      {
+        duration: "3 Months",
+        price: 5999,
+        popular: false,
+        gradient: "from-rose-500 to-pink-500",
+      },
+      {
+        duration: "6 Months",
+        price: 11999,
+        popular: true,
+        gradient: "from-indigo-500 to-purple-500",
+      },
+      {
+        duration: "1 Year",
+        price: 19999,
+        popular: false,
+        gradient: "from-slate-700 to-slate-900",
+      },
+    ];
 
-  return (
-    <div className="space-y-10">
-      {/* ACTIVE SUBSCRIPTION */}
-      {userData.subscription && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-500 to-green-600 p-10 text-white shadow-2xl"
-        >
-          <div className="absolute inset-0 bg-black/10" />
-          <div className="relative z-10 text-center">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
-              <ShieldCheck size={42} />
+    return (
+      <div className="space-y-10">
+        {/* ACTIVE SUBSCRIPTION */}
+        {userData.subscription && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-500 to-green-600 p-10 text-white shadow-2xl"
+          >
+            <div className="absolute inset-0 bg-black/10" />
+            <div className="relative z-10 text-center">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
+                <ShieldCheck size={42} />
+              </div>
+              <h2 className="text-3xl font-extrabold">Premium Member</h2>
+              <p className="mt-2 text-white/90">
+                Active Plan:{" "}
+                <span className="font-bold">
+                  {userData.subscription.plan_duration}
+                </span>
+              </p>
+              <p className="mt-1 text-sm text-white/80">
+                Enjoy priority service & exclusive benefits ✨
+              </p>
             </div>
-            <h2 className="text-3xl font-extrabold">Premium Member</h2>
-            <p className="mt-2 text-white/90">
-              Active Plan:{" "}
-              <span className="font-bold">
-                {userData.subscription.plan_duration}
-              </span>
-            </p>
-            <p className="mt-1 text-sm text-white/80">
-              Enjoy priority service & exclusive benefits ✨
-            </p>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
 
-      {/* PLANS */}
-      {!userData.subscription && (
-        <>
-          <div className="text-center">
-            <h2 className="text-4xl font-extrabold text-slate-900">
-              Choose Your Membership
-            </h2>
-            <p className="mt-2 text-slate-500 max-w-xl mx-auto">
-              Unlock premium support, free replacements & discounted services.
-            </p>
-          </div>
+        {/* PLANS */}
+        {!userData.subscription && (
+          <>
+            <div className="text-center">
+              <h2 className="text-4xl font-extrabold text-slate-900">
+                Choose Your Membership
+              </h2>
+              <p className="mt-2 text-slate-500 max-w-xl mx-auto">
+                Unlock premium support, free replacements & discounted services.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan) => (
-              <motion.div
-                key={plan.duration}
-                whileHover={{ y: -8 }}
-                className={`relative rounded-3xl p-[2px] ${
-                  plan.popular
-                    ? "bg-gradient-to-r from-rose-500 to-pink-500"
-                    : "bg-slate-200"
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 rounded-full bg-rose-500 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white shadow-lg">
-                    Most Popular
-                  </div>
-                )}
-
-                <div className="h-full rounded-3xl bg-white p-8 shadow-xl">
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">
-                    {plan.duration}
-                  </h3>
-
-                  <div className="flex items-end gap-2 mb-4">
-                    <span className="text-4xl font-black text-slate-900">
-                      ₹{plan.price}
-                    </span>
-                  </div>
-
-                  <ul className="space-y-4 text-sm text-slate-600 mb-8">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle size={16} className="text-emerald-500" />
-                      1 Free Maid Replacement
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle size={16} className="text-emerald-500" />
-                      10% Discount on Salary
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle size={16} className="text-emerald-500" />
-                      Priority Customer Support
-                    </li>
-                  </ul>
-
-                  <button
-                    onClick={() => handleRazorpaySubscription(plan)}
-                    disabled={paymentProcessing}
-                    className={`w-full rounded-2xl py-4 font-bold text-white transition-all shadow-lg ${
-                      plan.popular
-                        ? "bg-gradient-to-r from-rose-500 to-pink-500 hover:opacity-90"
-                        : "bg-slate-900 hover:bg-slate-800"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {plans.map((plan) => (
+                <motion.div
+                  key={plan.duration}
+                  whileHover={{ y: -8 }}
+                  className={`relative rounded-3xl p-[2px] ${plan.popular
+                      ? "bg-gradient-to-r from-rose-500 to-pink-500"
+                      : "bg-slate-200"
                     }`}
-                  >
-                    {paymentProcessing ? (
-                      <RefreshCw className="mx-auto animate-spin" />
-                    ) : (
-                      <>
-                        <CreditCard size={18} className="inline mr-2" />
-                        Subscribe Now
-                      </>
-                    )}
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 rounded-full bg-rose-500 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white shadow-lg">
+                      Most Popular
+                    </div>
+                  )}
+
+                  <div className="h-full rounded-3xl bg-white p-8 shadow-xl">
+                    <h3 className="text-xl font-bold text-slate-900 mb-1">
+                      {plan.duration}
+                    </h3>
+
+                    <div className="flex items-end gap-2 mb-4">
+                      <span className="text-4xl font-black text-slate-900">
+                        ₹{plan.price}
+                      </span>
+                    </div>
+
+                    <ul className="space-y-4 text-sm text-slate-600 mb-8">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-emerald-500" />
+                        1 Free Maid Replacement
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-emerald-500" />
+                        10% Discount on Salary
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-emerald-500" />
+                        Priority Customer Support
+                      </li>
+                    </ul>
+
+                    <button
+                      onClick={() => handleRazorpaySubscription(plan)}
+                      disabled={paymentProcessing}
+                      className={`w-full rounded-2xl py-4 font-bold text-white transition-all shadow-lg ${plan.popular
+                          ? "bg-gradient-to-r from-rose-500 to-pink-500 hover:opacity-90"
+                          : "bg-slate-900 hover:bg-slate-800"
+                        }`}
+                    >
+                      {paymentProcessing ? (
+                        <RefreshCw className="mx-auto animate-spin" />
+                      ) : (
+                        <>
+                          <CreditCard size={18} className="inline mr-2" />
+                          Subscribe Now
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
 
 
   // --- INTERNAL COMPONENTS ---
-  
+
   function ProfileField({ label, value, icon, isEditing, onChange, textarea }) {
     return (
       <div className="space-y-2">
@@ -615,17 +633,17 @@ function renderSubscriptionsTab() {
             </div>
             <div className="flex gap-3 pt-4">
               <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 text-slate-600 font-bold">Discard</button>
-<button
-  onClick={handleChangeMaid}
-  disabled={updatingMaid}
-  className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-700 disabled:opacity-50 flex items-center justify-center gap-2"
->
-  {updatingMaid ? (
-    <RefreshCw className="animate-spin" size={18} />
-  ) : (
-    "Update Now"
-  )}
-</button>
+              <button
+                onClick={handleChangeMaid}
+                disabled={updatingMaid}
+                className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {updatingMaid ? (
+                  <RefreshCw className="animate-spin" size={18} />
+                ) : (
+                  "Update Now"
+                )}
+              </button>
             </div>
           </div>
         </motion.div>

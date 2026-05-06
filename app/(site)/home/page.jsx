@@ -213,7 +213,6 @@ export default function Home() {
 
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900">
-            {/* 🎥 Hero Background Video (... existing code ... ) */}
             {/* --- HERO BACKGROUND (Height: 50vh mobile / 60vh desktop) --- */}
             <div className="absolute top-0 left-0 w-full h-[50vh] md:h-[60vh] z-0 overflow-hidden">
                 {!imageError ? (
@@ -628,18 +627,7 @@ export default function Home() {
                                     ))}
                                 </ul>
 
-                                {/* CTA Button */}
-                                <motion.button
-                                    whileTap={{ scale: 0.95 }}
-                                    className={`w-full py-4 rounded-2xl font-bold text-sm tracking-widest uppercase transition-all duration-300 ${plan.popular
-                                        ? 'bg-blinkred text-white hover:bg-white hover:text-black'
-                                        : 'bg-gray-900 text-white hover:bg-blinkred'
-                                        }`}
-                                >
-                                    Get Started
-                                </motion.button>
-
-                                {/* Subtle Background Icon */}
+                              {/* Subtle Background Icon */}
                                 <div className="absolute -bottom-6 -right-6 opacity-[0.03] pointer-events-none group-hover:opacity-[0.07] transition-opacity">
                                     <HiOutlineCheckCircle size={150} />
                                 </div>
