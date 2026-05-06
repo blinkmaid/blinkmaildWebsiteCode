@@ -624,7 +624,7 @@ export default function ProfilePage() {
           </div>
           <div className="p-8 space-y-4">
             <div>
-              <label className="text-sm font-bold text-slate-500 block mb-1">New Maid Name/ID</label>
+              <label className="text-sm font-bold text-slate-500 block mb-1">Present Maid Name/ID</label>
               <input type="text" value={newMaid} onChange={(e) => setNewMaid(e.target.value)} className="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-rose-500" placeholder="e.g. MH-102" />
             </div>
             <div>
