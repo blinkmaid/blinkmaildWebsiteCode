@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Crown, ChevronRight, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-
+import toast from "react-hot-toast";
 interface Service {
   id: number;
   name: string;
@@ -74,8 +74,18 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05 }}
-                onClick={() => router.push(`/services/${service.id}`)}
-                className="group relative h-[480px] bg-[#111] border border-white/5 rounded-[2rem] overflow-hidden cursor-pointer"
+                onClick={async () => {
+                  const {
+                    data: { session },
+                  } = await supabase.auth.getSession();
+
+                  if (!session) {
+                    toast.error("Please login to view service details");
+                    return;
+                  }
+
+                  router.push(`/services/${service.id}`);
+                }} className="group relative h-[480px] bg-[#111] border border-white/5 rounded-[2rem] overflow-hidden cursor-pointer"
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0">

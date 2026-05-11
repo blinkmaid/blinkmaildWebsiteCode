@@ -333,7 +333,18 @@ export default function Home() {
                                             </p>
 
                                             <motion.a
-                                                onClick={() => router.push(`/services/${s.id}`)}
+                                                onClick={async () => {
+                                                    const {
+                                                        data: { session },
+                                                    } = await supabase.auth.getSession();
+
+                                                    if (!session) {
+                                                        toast.error("Please login to view service details");
+                                                        return;
+                                                    }
+
+                                                    router.push(`/services/${service.id}`);
+                                                }}
                                                 className="inline-flex items-center justify-center w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold hover:bg-blinkred hover:border-blinkred transition-all duration-300 group/btn"
                                                 whileTap={{ scale: 0.95 }}
                                             >
@@ -627,7 +638,7 @@ export default function Home() {
                                     ))}
                                 </ul>
 
-                              {/* Subtle Background Icon */}
+                                {/* Subtle Background Icon */}
                                 <div className="absolute -bottom-6 -right-6 opacity-[0.03] pointer-events-none group-hover:opacity-[0.07] transition-opacity">
                                     <HiOutlineCheckCircle size={150} />
                                 </div>
@@ -918,174 +929,174 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-{/* Premium Brand Section - blinkred Background */}
-<section className="relative bg-blinkred py-24 overflow-hidden">
-    
-    {/* Subtle Texture Overlay for Professional Depth */}
-    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none" />
-    
-    {/* Soft Glow to prevent the red from looking "flat" */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)] pointer-events-none" />
+            {/* Premium Brand Section - blinkred Background */}
+            <section className="relative bg-blinkred py-24 overflow-hidden">
 
-    <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-            
-            {/* Left side: High-contrast typography */}
-            <div className="max-w-2xl">
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    className="flex items-center gap-2 mb-6"
-                >
-                    <span className="h-[1px] w-8 bg-white/60" />
-                    <span className="text-white/80 text-[10px] font-black tracking-[0.4em] uppercase">
-                        Premium Quality
-                    </span>
-                </motion.div>
-                
-                <motion.h2 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] mb-8"
-                >
-                    Experience the <br />
-                    <span className="italic font-serif text-black/20">Blink Standard.</span>
-                </motion.h2>
-            </div>
+                {/* Subtle Texture Overlay for Professional Depth */}
+                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none" />
 
-            {/* Right side: Compact Stats / Trust Box */}
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] md:w-80 shadow-2xl"
-            >
-                <div className="space-y-6">
-                    <div>
-                        <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Success Rate</p>
-                        <h4 className="text-4xl font-black text-white">99.9%</h4>
-                    </div>
-                    <div className="h-[1px] w-full bg-white/10" />
-                    <div>
-                        <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Response Time</p>
-                        <h4 className="text-4xl font-black text-white">Instant</h4>
-                    </div>
-                    
-                    <button className="w-full py-4 bg-white text-blinkred rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300">
-                        Book Now
-                    </button>
-                </div>
-            </motion.div>
+                {/* Soft Glow to prevent the red from looking "flat" */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)] pointer-events-none" />
 
-        </div>
-    </div>
-</section>
-            {/* Contact Section - Premium Location & Contact Info */}
-     {/* Contact Section - Boutique Concierge Design */}
-<section id="contact-info" className="relative bg-white py-10 overflow-hidden">
-    
-    {/* Minimalist Background Accents */}
-    <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-50/50 -z-10" />
-    <div className="absolute -top-24 -left-24 w-96 h-96 bg-blinkred/5 rounded-full blur-[120px] -z-10" />
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-12">
 
-    <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-20">
-            
-            {/* Left Column: Brand Statement */}
-            <div className="lg:w-1/3">
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <span className="text-blinkred text-[10px] font-black tracking-[0.4em] uppercase mb-6 block">
-                        Available 24/7
-                    </span>
-                    <h2 className="text-5xl md:text-6xl font-bold text-gray-900 leading-[0.9] tracking-tighter mb-8">
-                        Let’s start a <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blinkred to-pink-600 italic font-serif">
-                            conversation.
-                        </span>
-                    </h2>
-                    <p className="text-gray-500 text-lg font-medium leading-relaxed mb-10">
-                        Whether you need a dedicated professional or a quick consultation, our concierge team is ready to assist you.
-                    </p>
-                    
-                    {/* Social/Trust Indicator */}
-                    <div className="pt-10 border-t border-gray-100">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Official Channels</p>
-                        <div className="flex gap-4">
-                            {['Instagram', 'LinkedIn', 'WhatsApp'].map((social) => (
-                                <span key={social} className="text-sm font-bold text-gray-900 hover:text-blinkred cursor-pointer transition-colors">
-                                    {social}
+                        {/* Left side: High-contrast typography */}
+                        <div className="max-w-2xl">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                className="flex items-center gap-2 mb-6"
+                            >
+                                <span className="h-[1px] w-8 bg-white/60" />
+                                <span className="text-white/80 text-[10px] font-black tracking-[0.4em] uppercase">
+                                    Premium Quality
                                 </span>
+                            </motion.div>
+
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] mb-8"
+                            >
+                                Experience the <br />
+                                <span className="italic font-serif text-black/20">Blink Standard.</span>
+                            </motion.h2>
+                        </div>
+
+                        {/* Right side: Compact Stats / Trust Box */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] md:w-80 shadow-2xl"
+                        >
+                            <div className="space-y-6">
+                                <div>
+                                    <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Success Rate</p>
+                                    <h4 className="text-4xl font-black text-white">99.9%</h4>
+                                </div>
+                                <div className="h-[1px] w-full bg-white/10" />
+                                <div>
+                                    <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Response Time</p>
+                                    <h4 className="text-4xl font-black text-white">Instant</h4>
+                                </div>
+
+                                <button className="w-full py-4 bg-white text-blinkred rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300">
+                                    Book Now
+                                </button>
+                            </div>
+                        </motion.div>
+
+                    </div>
+                </div>
+            </section>
+            {/* Contact Section - Premium Location & Contact Info */}
+            {/* Contact Section - Boutique Concierge Design */}
+            <section id="contact-info" className="relative bg-white py-10 overflow-hidden">
+
+                {/* Minimalist Background Accents */}
+                <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-50/50 -z-10" />
+                <div className="absolute -top-24 -left-24 w-96 h-96 bg-blinkred/5 rounded-full blur-[120px] -z-10" />
+
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex flex-col lg:flex-row gap-20">
+
+                        {/* Left Column: Brand Statement */}
+                        <div className="lg:w-1/3">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8 }}
+                            >
+                                <span className="text-blinkred text-[10px] font-black tracking-[0.4em] uppercase mb-6 block">
+                                    Available 24/7
+                                </span>
+                                <h2 className="text-5xl md:text-6xl font-bold text-gray-900 leading-[0.9] tracking-tighter mb-8">
+                                    Let’s start a <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blinkred to-pink-600 italic font-serif">
+                                        conversation.
+                                    </span>
+                                </h2>
+                                <p className="text-gray-500 text-lg font-medium leading-relaxed mb-10">
+                                    Whether you need a dedicated professional or a quick consultation, our concierge team is ready to assist you.
+                                </p>
+
+                                {/* Social/Trust Indicator */}
+                                <div className="pt-10 border-t border-gray-100">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Official Channels</p>
+                                    <div className="flex gap-4">
+                                        {['Instagram', 'LinkedIn', 'WhatsApp'].map((social) => (
+                                            <span key={social} className="text-sm font-bold text-gray-900 hover:text-blinkred cursor-pointer transition-colors">
+                                                {social}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Right Column: Contact Cards */}
+                        <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {[
+                                {
+                                    icon: <HiOutlineMail size={24} />,
+                                    title: "Email Support",
+                                    detail: "support@blinkmaid.com",
+                                    sub: "Expert assistance in < 2 hrs",
+                                    color: "bg-blue-500"
+                                },
+                                {
+                                    icon: <HiOutlinePhone size={24} />,
+                                    title: "Priority Line",
+                                    detail: "+91 93804 19755",
+                                    sub: "Available Mon - Sun, 9am - 9pm",
+                                    color: "bg-blinkred"
+                                },
+                                {
+                                    icon: <HiOutlineLocationMarker size={24} />,
+                                    title: "Bengaluru HQ",
+                                    detail: "Telecom Layout, Thanisandra",
+                                    sub: "No. 33, Shop 01, PIN 560077",
+                                    color: "bg-zinc-900",
+                                    wide: true
+                                }
+                            ].map((item, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    className={`group relative p-8 rounded-[2rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] ${item.wide ? 'md:col-span-2' : ''}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.1 }}
+                                >
+                                    <div className="flex items-start justify-between mb-12">
+                                        <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500">
+                                            {item.icon}
+                                        </div>
+                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="w-2 h-2 rounded-full bg-blinkred animate-ping" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-xl font-bold text-gray-900 group-hover:text-blinkred transition-colors duration-300">
+                                            {item.detail}
+                                        </p>
+                                        <p className="mt-2 text-sm text-gray-500 font-medium">
+                                            {item.sub}
+                                        </p>
+                                    </div>
+
+                                    {/* Subtle interactive line */}
+                                    <div className="absolute bottom-0 left-8 right-8 h-[2px] bg-gray-50 group-hover:bg-blinkred transition-all duration-500 scale-x-0 group-hover:scale-x-100 transform origin-left" />
+                                </motion.div>
                             ))}
                         </div>
                     </div>
-                </motion.div>
-            </div>
-
-            {/* Right Column: Contact Cards */}
-            <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                    {
-                        icon: <HiOutlineMail size={24} />,
-                        title: "Email Support",
-                        detail: "support@blinkmaid.com",
-                        sub: "Expert assistance in < 2 hrs",
-                        color: "bg-blue-500"
-                    },
-                    {
-                        icon: <HiOutlinePhone size={24} />,
-                        title: "Priority Line",
-                        detail: "+91 93804 19755",
-                        sub: "Available Mon - Sun, 9am - 9pm",
-                        color: "bg-blinkred"
-                    },
-                    {
-                        icon: <HiOutlineLocationMarker size={24} />,
-                        title: "Bengaluru HQ",
-                        detail: "Telecom Layout, Thanisandra",
-                        sub: "No. 33, Shop 01, PIN 560077",
-                        color: "bg-zinc-900",
-                        wide: true
-                    }
-                ].map((item, idx) => (
-                    <motion.div
-                        key={idx}
-                        className={`group relative p-8 rounded-[2rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] ${item.wide ? 'md:col-span-2' : ''}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                    >
-                        <div className="flex items-start justify-between mb-12">
-                            <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500">
-                                {item.icon}
-                            </div>
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="w-2 h-2 rounded-full bg-blinkred animate-ping" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">
-                                {item.title}
-                            </h3>
-                            <p className="text-xl font-bold text-gray-900 group-hover:text-blinkred transition-colors duration-300">
-                                {item.detail}
-                            </p>
-                            <p className="mt-2 text-sm text-gray-500 font-medium">
-                                {item.sub}
-                            </p>
-                        </div>
-
-                        {/* Subtle interactive line */}
-                        <div className="absolute bottom-0 left-8 right-8 h-[2px] bg-gray-50 group-hover:bg-blinkred transition-all duration-500 scale-x-0 group-hover:scale-x-100 transform origin-left" />
-                    </motion.div>
-                ))}
-            </div>
-        </div>
-    </div>
-</section>
+                </div>
+            </section>
 
         </div>
     );

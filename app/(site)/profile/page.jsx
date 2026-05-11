@@ -172,12 +172,15 @@ export default function ProfilePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: plan.price,
+          // FIX: Convert plan price to Paise
+          amount: plan.price * 100,
           currency: "INR",
           plan_duration: plan.duration,
           user_email: userData.email,
         }),
       });
+
+      // ... rest of your code remains the same
 
       const orderData = await response.json();
 
@@ -233,20 +236,76 @@ export default function ProfilePage() {
     }
   };
 
-  const handleRebook = async (b) => {
-    const { data, error } = await supabase
-      .from("services")
-      .select("id")
-      .ilike("name", b.service_name.trim()) // flexible match
-      .single();
+  const handleRebook = async (booking) => {
+    if (paymentProcessing) return;
+    setPaymentProcessing(true);
 
-    if (error || !data) {
-      showToast("error", "Service not found");
-      return;
+    try {
+      const rebookAmount = booking.final_amount || 9900;
+
+      const response = await fetch("/api/create-razorpay-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // FIX: Multiply by 100 to convert Rupees to Paise
+          amount: rebookAmount * 100,
+          currency: "INR",
+          user_email: userData.email,
+        }),
+      });
+
+      const orderData = await response.json();
+
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: orderData.amount, // This will now be correctly in Paise
+        currency: "INR",
+        name: "Service Renewal",
+        description: `Renewing ${booking.service_name}`,
+        order_id: orderData.id,
+        handler: async (res) => {
+          const { error: insertError } = await supabase
+            .from("bookings")
+            .insert([{
+              user_id: userData.id,
+              service_name: booking.service_name,
+              sub_service_name: booking.sub_service_name,
+              city: booking.city,
+              sub_service_price: booking.sub_service_price,
+              total_price: booking.total_price,
+              final_amount: rebookAmount, // Store the Rupee value in your DB
+              payment_status: "paid",
+              payment_id: res.razorpay_payment_id,
+              order_id: res.razorpay_order_id,
+              booking_date: new Date().toISOString().split('T')[0],
+              customer_details: booking.customer_details,
+              maid_id: booking.maid_id,
+            }]);
+
+          if (insertError) {
+            showToast("error", "Payment successful, but booking failed to save.");
+          } else {
+            showToast("success", "Service Renewed Successfully!");
+            fetchBookings(userData.id);
+          }
+        },
+        prefill: {
+          name: userData.name,
+          email: userData.email,
+          contact: userData.phone
+        },
+        theme: { color: "#111827" },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      showToast("error", "Failed to start renewal process.");
+    } finally {
+      setPaymentProcessing(false);
     }
-
-    router.push(`/services/${data.id}`);
   };
+
 
   if (loading) return <LoadingSpinner />;
 
@@ -441,18 +500,30 @@ export default function ProfilePage() {
                   <div className="flex justify-between text-sm"><span className="text-slate-500">Amount Paid</span> <span className="font-bold text-slate-900">₹{b.final_amount}</span></div>
                   <div className="flex justify-between text-sm"><span className="text-slate-500">City</span> <span className="font-medium text-slate-700">{b.city}</span></div>
                 </div>
-                <button
-                  onClick={() => handleRebook(b)}
-                  className="w-full py-3 mt-2 rounded-xl bg-slate-900 text-white font-bold"
-                >
-                  Re-book Service
-                </button>
-                <button
-                  onClick={() => { setSelectedBooking(b); setIsModalOpen(true); }}
-                  className="w-full py-3 rounded-xl border border-rose-100 text-rose-600 font-bold hover:bg-rose-50 transition-colors flex items-center justify-center gap-2"
-                >
-                  <RefreshCw size={16} /> Manage Service
-                </button>
+                <div className="flex flex-col gap-3 mt-6">
+                  <button
+                    onClick={() => handleRebook(b)}
+                    disabled={paymentProcessing}
+                    className="w-full py-3.5 rounded-2xl bg-slate-950 text-white font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-200"
+                  >
+                    {paymentProcessing ? (
+                      <RefreshCw className="animate-spin" size={18} />
+                    ) : (
+                      <>
+                        <CreditCard size={18} />
+                        {/* Dynamically show the price from the SQL record */}
+                        Renew Now (₹{b.final_amount?.toLocaleString()})
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => { setSelectedBooking(b); setIsModalOpen(true); }}
+                    className="w-full py-3 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <RefreshCw size={16} /> Manage Service
+                  </button>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -529,8 +600,8 @@ export default function ProfilePage() {
                   key={plan.duration}
                   whileHover={{ y: -8 }}
                   className={`relative rounded-3xl p-[2px] ${plan.popular
-                      ? "bg-gradient-to-r from-rose-500 to-pink-500"
-                      : "bg-slate-200"
+                    ? "bg-gradient-to-r from-rose-500 to-pink-500"
+                    : "bg-slate-200"
                     }`}
                 >
                   {plan.popular && (
@@ -569,8 +640,8 @@ export default function ProfilePage() {
                       onClick={() => handleRazorpaySubscription(plan)}
                       disabled={paymentProcessing}
                       className={`w-full rounded-2xl py-4 font-bold text-white transition-all shadow-lg ${plan.popular
-                          ? "bg-gradient-to-r from-rose-500 to-pink-500 hover:opacity-90"
-                          : "bg-slate-900 hover:bg-slate-800"
+                        ? "bg-gradient-to-r from-rose-500 to-pink-500 hover:opacity-90"
+                        : "bg-slate-900 hover:bg-slate-800"
                         }`}
                     >
                       {paymentProcessing ? (
