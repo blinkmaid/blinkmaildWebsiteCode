@@ -22,7 +22,7 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { useToast } from "@/app/components/toast/ToastContext";
 import { useRouter } from "next/navigation";
-
+import AuthModal from "@/app/components/AuthModal";
 // --- Existing Carousel & Card Components (omitted for brevity) ---
 // (Keep Carousel, CarouselContent, CarouselItem, CarouselButton, Card, CardContent as they are)
 
@@ -31,7 +31,6 @@ function Carousel({ children, className = "" }) {
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
     const router = useRouter();
-
     const updateButtons = () => {
         if (!emblaApi) return;
         setCanScrollPrev(emblaApi.canScrollPrev());
@@ -117,12 +116,13 @@ const getServiceIcon = (name) => {
 // ✅ Main Home Page
 export default function Home() {
     const [imageError, setImageError] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const [video2Error, setVideo2Error] = useState(false);
     const [testimonials, setTestimonials] = useState([]); // ✅ New state for testimonials
     const [loadingTestimonials, setLoadingTestimonials] = useState(true); // ✅ New state for loading
     const [services, setServices] = useState([]); // ✅ New state for services
     const [loadingServices, setLoadingServices] = useState(true); // ✅ New state for loading services
-
+    const [isRegister, setIsRegister] = useState(false);
     // --- Data Fetching Logic (Updated) ---
     useEffect(() => {
         const fetchTestimonials = async () => {
@@ -339,11 +339,12 @@ export default function Home() {
                                                     } = await supabase.auth.getSession();
 
                                                     if (!session) {
-                                                        toast.error("Please login to view service details");
+                                                        toast.error("Please login first");
+                                                        setModalOpen(true); // ✅ Correct prop name
                                                         return;
                                                     }
 
-                                                    router.push(`/services/${service.id}`);
+                                                    router.push(`/services/${s.id}`);
                                                 }}
                                                 className="inline-flex items-center justify-center w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold hover:bg-blinkred hover:border-blinkred transition-all duration-300 group/btn"
                                                 whileTap={{ scale: 0.95 }}
@@ -1097,7 +1098,13 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-
+            <AuthModal
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                isRegister={isRegister}
+                setIsRegister={setIsRegister}
+            />
         </div>
+
     );
 }

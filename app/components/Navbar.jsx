@@ -234,11 +234,11 @@ export default function Navbar() {
 
   return (
     <>
-<header
-  className={`fixed top-0 left-0 w-full z-50 border-b border-gray-100 transition-all
+      <header
+        className={`fixed top-0 left-0 w-full z-50 border-b border-gray-100 transition-all
     ${menuOpen ? "bg-white" : "bg-white/80 backdrop-blur-md"}
   `}
->
+      >
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 md:h-24 flex items-center justify-between">
           <Link href="/" className="relative group">
             <Image src={logo} alt="Logo" width={160} height={50} className="transition-transform duration-500 group-hover:scale-105" />
@@ -360,7 +360,9 @@ export default function Navbar() {
 
               <div className="mt-auto pt-10">
                 {!user && (
+
                   <button
+
                     onClick={() => {
                       setModalOpen(true);
                       setMenuOpen(false);
@@ -382,6 +384,7 @@ export default function Navbar() {
                   >
                     Get Started
                   </button>
+
                 )}
               </div>
             </motion.div>
