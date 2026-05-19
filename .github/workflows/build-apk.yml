@@ -1,44 +1,47 @@
 name: Build Android APK
+
 on:
-  workflow_dispatch: 
+  push:
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Install Dependencies
+      - name: Install Project Dependencies
         run: npm install
 
-      - name: Next.js Build
-        run: npm run build
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.NEXT_PUBLIC_RAZORPAY_KEY_ID }}
+      - name: Create Web Distribution Directory
+        run: mkdir -p out && touch out/index.html
 
-      - name: Set up JDK 21
+      - name: Setup Java Development Environment
         uses: actions/setup-java@v4
         with:
+          distribution: 'zulu'
           java-version: '21'
-          distribution: 'temurin'
 
-      - name: Build APK
+      - name: Configure Android SDK Tools
+        uses: android-actions/setup-android@v3
+
+      - name: Sync Capacitor Bridge Configuration
+        run: npx cap sync android
+
+      - name: Compile Unsigned Debug APK
         run: |
-          npx cap sync
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Upload Compiled Binary Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: blinkmaid-app
+          name: blinkmaid-app-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk

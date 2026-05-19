@@ -1,9 +1,22 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.app',
-  appName: 'blinkmaid',
-  webDir: 'out'
+  appId: 'com.blinkmaid.app',
+  appName: 'BlinkMaid',
+  webDir: 'out',
+  server: {
+    // Direct live link so your mobile app updates instantly when you push web changes
+    url: 'https://blinkmaild-website-code.vercel.app/home', 
+    cleartext: true
+  },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: "#ffffff",
+      showSpinner: true,
+      androidScaleType: "CENTER_CROP"
+    }
+  }
 };
 
 export default config;
