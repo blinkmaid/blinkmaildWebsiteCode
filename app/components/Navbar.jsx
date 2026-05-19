@@ -328,68 +328,103 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed inset-0 bg-white opacity-100 z-[90] p-6 flex flex-col"
-            >
-              <div className="flex justify-between items-center mb-8">
-                <Image src={logo} alt="Logo" width={140} />
-                <button onClick={() => setMenuOpen(false)}>
-                  <HiX size={28} />
-                </button>
-              </div>
+<AnimatePresence>
+  {menuOpen && (
+    <motion.div
+      initial={{ x: "100%" }}
+      animate={{ x: 0 }}
+      exit={{ x: "100%" }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 28,
+      }}
+      className="
+        fixed inset-0 z-[90]
+        bg-white/95 backdrop-blur-xl
+        flex flex-col
+      "
+    >
+      {/* Top Header */}
+      <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
+        <Image
+          src={logo}
+          alt="Logo"
+          width={120}
+          className="object-contain"
+        />
 
-              <nav className="flex flex-col gap-6">
-                {menuItems.map(({ label, path }) => (
-                  <Link
-                    key={path}
-                    href={path}
-                    onClick={() => setMenuOpen(false)}
-                    className={`text-xl font-black uppercase tracking-tight ${pathname === path ? "text-blinkred" : "text-gray-700"
-                      }`}
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </nav>
+        <button
+          onClick={() => setMenuOpen(false)}
+          className="
+            w-11 h-11 rounded-full
+            bg-gray-100
+            flex items-center justify-center
+            active:scale-95
+            transition
+          "
+        >
+          <HiX size={24} className="text-gray-700" />
+        </button>
+      </div>
 
-              <div className="mt-auto pt-10">
-                {!user && (
+      {/* Navigation */}
+      <nav className="flex flex-col px-6 py-8 gap-3">
+        {menuItems.map(({ label, path }) => (
+          <Link
+            key={path}
+            href={path}
+            onClick={() => setMenuOpen(false)}
+            className={`
+              px-5 py-4 rounded-2xl
+              text-[15px]
+              font-black
+              uppercase
+              tracking-[0.12em]
+              transition-all duration-300
+              ${
+                pathname === path
+                  ? "bg-blinkred text-white shadow-lg"
+                  : "bg-gray-50 text-gray-700 active:bg-gray-100"
+              }
+            `}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
 
-                  <button
-
-                    onClick={() => {
-                      setModalOpen(true);
-                      setMenuOpen(false);
-                    }}
-                    className="
-  w-full 
-  py-5 
-  text-lg 
-  bg-blinkblack 
-  text-white 
-  rounded-full 
-  font-black 
-  uppercase 
-  tracking-[0.25em]
-  shadow-2xl
-  hover:bg-blinkred
-  transition-all
-"
-                  >
-                    Get Started
-                  </button>
-
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Bottom CTA */}
+      <div className="mt-auto p-6 border-t border-gray-100">
+        {!user && (
+          <button
+            onClick={() => {
+              setModalOpen(true);
+              setMenuOpen(false);
+            }}
+            className="
+              w-full
+              py-4
+              rounded-2xl
+              bg-blinkblack
+              text-white
+              text-[12px]
+              font-black
+              uppercase
+              tracking-[0.18em]
+              shadow-xl
+              hover:bg-blinkred
+              active:scale-[0.98]
+              transition-all duration-300
+            "
+          >
+            Get Started
+          </button>
+        )}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
       </header>
 
