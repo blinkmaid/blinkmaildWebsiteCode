@@ -328,81 +328,80 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-<AnimatePresence>
-  {menuOpen && (
-    <motion.div
-      initial={{ x: "100%" }}
-      animate={{ x: 0 }}
-      exit={{ x: "100%" }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 28,
-      }}
-      className="
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 28,
+              }}
+              className="
         fixed inset-0 z-[90]
         bg-white/95 backdrop-blur-xl
         flex flex-col
       "
-    >
-      {/* Top Header */}
-      <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
-        <Image
-          src={logo}
-          alt="Logo"
-          width={120}
-          className="object-contain"
-        />
+            >
+              {/* Top Header */}
+              <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
+                <Image
+                  src={logo}
+                  alt="Logo"
+                  width={120}
+                  className="object-contain"
+                />
 
-        <button
-          onClick={() => setMenuOpen(false)}
-          className="
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="
             w-11 h-11 rounded-full
             bg-gray-100
             flex items-center justify-center
             active:scale-95
             transition
           "
-        >
-          <HiX size={24} className="text-gray-700" />
-        </button>
-      </div>
+                >
+                  <HiX size={24} className="text-gray-700" />
+                </button>
+              </div>
 
-      {/* Navigation */}
-      <nav className="flex flex-col px-6 py-8 gap-3">
-        {menuItems.map(({ label, path }) => (
-          <Link
-            key={path}
-            href={path}
-            onClick={() => setMenuOpen(false)}
-            className={`
+              {/* Navigation */}
+              <nav className="flex flex-col px-6 py-8 gap-3">
+                {menuItems.map(({ label, path }) => (
+                  <Link
+                    key={path}
+                    href={path}
+                    onClick={() => setMenuOpen(false)}
+                    className={`
               px-5 py-4 rounded-2xl
               text-[15px]
               font-black
               uppercase
               tracking-[0.12em]
               transition-all duration-300
-              ${
-                pathname === path
-                  ? "bg-blinkred text-white shadow-lg"
-                  : "bg-gray-50 text-gray-700 active:bg-gray-100"
-              }
+              ${pathname === path
+                        ? "bg-blinkred text-white shadow-lg"
+                        : "bg-gray-50 text-gray-700 active:bg-gray-100"
+                      }
             `}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
 
-      {/* Bottom CTA */}
-      <div className="mt-auto p-6 border-t border-gray-100">
-        {!user && (
-          <button
-            onClick={() => {
-              setModalOpen(true);
-              setMenuOpen(false);
-            }}
-            className="
+              {/* Bottom CTA */}
+              <div className="mt-auto p-6 border-t border-gray-100">
+                {!user && (
+                  <button
+                    onClick={() => {
+                      setModalOpen(true);
+                      setMenuOpen(false);
+                    }}
+                    className="
               w-full
               py-4
               rounded-2xl
@@ -417,14 +416,14 @@ export default function Navbar() {
               active:scale-[0.98]
               transition-all duration-300
             "
-          >
-            Get Started
-          </button>
-        )}
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+                  >
+                    Get Started
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </header>
 
