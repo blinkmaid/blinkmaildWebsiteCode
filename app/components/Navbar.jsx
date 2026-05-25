@@ -188,12 +188,6 @@ export default function Navbar() {
     resetForm();
   };
 
-
-
-
-
-
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -206,7 +200,7 @@ export default function Navbar() {
 
     const options = {
       key: "rzp_test_SlDl2RlSCBfONB",
-      amount: amountInPaise, // now correct
+      amount: amountInPaise,
       currency: "INR",
       name: "Blinkmaid",
       handler: async function (response) {
@@ -313,12 +307,13 @@ export default function Navbar() {
                 </div>
               </div>
             ) : (
-              <button
-                onClick={() => setModalOpen(true)}
-                className="text-[12px] font-black uppercase tracking-[0.2em] px-8 py-4 bg-blinkblack text-white rounded-full hover:bg-blinkred transition-all shadow-2xl shadow-black/20"
-              >
-                Get Started
-              </button>
+              // NEW (Less broad on mobile)
+<button
+  onClick={() => setModalOpen(true)}
+  className="text-[9px] md:text-[12px] font-black uppercase tracking-wider md:tracking-[0.2em] px-3 py-2 md:px-8 md:py-4 bg-blinkblack text-white rounded-full hover:bg-blinkred transition-all shadow-2xl shadow-black/20"
+>
+  Get Started
+</button>
             )}
 
             <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 text-blinkblack">
@@ -397,28 +392,14 @@ export default function Navbar() {
               <div className="mt-auto p-6 border-t border-gray-100">
                 {!user && (
                   <button
-                    onClick={() => {
-                      setModalOpen(true);
-                      setMenuOpen(false);
-                    }}
-                    className="
-              w-full
-              py-4
-              rounded-2xl
-              bg-blinkblack
-              text-white
-              text-[12px]
-              font-black
-              uppercase
-              tracking-[0.18em]
-              shadow-xl
-              hover:bg-blinkred
-              active:scale-[0.98]
-              transition-all duration-300
-            "
-                  >
-                    Get Started
-                  </button>
+  onClick={() => {
+    setModalOpen(true);
+    setMenuOpen(false);
+  }}
+  className="max-w-[200px] mx-auto block py-3 rounded-2xl bg-blinkblack text-white text-[11px] font-black uppercase tracking-widest shadow-xl hover:bg-blinkred active:scale-[0.98] transition-all duration-300"
+>
+  Get Started
+</button>
                 )}
               </div>
             </motion.div>
