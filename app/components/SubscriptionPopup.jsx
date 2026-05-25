@@ -54,14 +54,14 @@ export default function BigSubscriptionPopup() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-red-600/10 backdrop-blur-xl z-[9999] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-red-600/10 backdrop-blur-xl z-[9999] flex items-center justify-center p-6"
         >
           {/* Main White Premium Container */}
           <motion.div
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative bg-white rounded-[3rem] shadow-[0_32px_64px_-12px_rgba(220,38,38,0.2)] max-w-xl w-full overflow-hidden border border-red-50"
+            className="relative bg-white rounded-2xl sm:rounded-[3rem] shadow-[0_32px_64px_-12px_rgba(220,38,38,0.2)] max-w-md sm:max-w-xl w-full overflow-hidden border border-red-50"
           >
             {/* Soft Red Aura Background */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-50 rounded-full blur-3xl -mr-32 -mt-32 opacity-60" />
@@ -69,44 +69,44 @@ export default function BigSubscriptionPopup() {
 
             <button
               onClick={() => setShow(false)}
-              className="absolute top-8 right-8 text-gray-300 hover:text-red-600 transition-colors z-10"
+              className="absolute top-4 right-4 sm:top-8 sm:right-8 text-gray-300 hover:text-red-600 transition-colors z-10"
             >
-              <X size={24} strokeWidth={3} />
+              <X size={20} className="sm:w-6 sm:h-6" strokeWidth={3} />
             </button>
 
-            <div className="relative p-12 flex flex-col items-center text-center">
+            <div className="relative p-5 sm:p-12 flex flex-col items-center text-center">
               {/* Badge Icon */}
               <motion.div 
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ repeat: Infinity, duration: 4 }}
-                className="bg-red-600 p-5 rounded-[2rem] shadow-xl shadow-red-200 mb-8"
+                className="bg-red-600 p-2.5 sm:p-5 rounded-xl sm:rounded-[2rem] shadow-xl shadow-red-200 mb-4 sm:mb-8"
               >
-                <Crown size={42} className="text-white" />
+                <Crown className="w-6 h-6 sm:w-[42px] sm:h-[42px] text-white" />
               </motion.div>
 
-              <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight leading-tight">
+              <h2 className="text-xl sm:text-4xl font-black text-gray-900 mb-2 sm:mb-4 tracking-tight leading-tight">
                 UPGRADE TO <br />
                 <span className="text-red-600">BLINKMAID PREMIUM</span>
               </h2>
 
-              <p className="text-gray-500 text-lg mb-10 font-medium">
+              <p className="text-gray-500 text-xs sm:text-lg mb-5 sm:mb-10 font-medium">
                 Subscribe now and unlock an exclusive <br />
                 <span className="text-gray-900 font-bold decoration-red-500 decoration-4 underline underline-offset-4">10% DISCOUNT</span> on every booking.
               </p>
 
               {/* Benefits Grid */}
-              <div className="grid grid-cols-1 gap-4 w-full mb-10">
-                <div className="flex items-center gap-4 bg-red-50/50 p-4 rounded-2xl border border-red-100/50 group hover:bg-red-50 transition-colors">
-                  <div className="bg-white p-2 rounded-lg shadow-sm">
-                    <Zap size={18} className="text-red-600" fill="currentColor" />
+              <div className="grid grid-cols-1 gap-2 sm:gap-4 w-full mb-5 sm:mb-10">
+                <div className="flex items-center gap-2.5 sm:gap-4 bg-red-50/50 p-2.5 sm:p-4 rounded-lg sm:rounded-2xl border border-red-100/50 group hover:bg-red-50 transition-colors">
+                  <div className="bg-white p-1 sm:p-2 rounded-lg shadow-sm">
+                    <Zap className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-red-600" fill="currentColor" />
                   </div>
-                  <p className="text-sm font-bold text-gray-800 uppercase tracking-wide text-left">Priority Service & Fast Booking</p>
+                  <p className="text-[11px] sm:text-sm font-bold text-gray-800 uppercase tracking-wide text-left">Priority Service & Fast Booking</p>
                 </div>
-                <div className="flex items-center gap-4 bg-red-50/50 p-4 rounded-2xl border border-red-100/50 group hover:bg-red-50 transition-colors">
-                  <div className="bg-white p-2 rounded-lg shadow-sm">
-                    <Sparkles size={18} className="text-red-600" fill="currentColor" />
+                <div className="flex items-center gap-2.5 sm:gap-4 bg-red-50/50 p-2.5 sm:p-4 rounded-lg sm:rounded-2xl border border-red-100/50 group hover:bg-red-50 transition-colors">
+                  <div className="bg-white p-1 sm:p-2 rounded-lg shadow-sm">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-red-600" fill="currentColor" />
                   </div>
-                  <p className="text-sm font-bold text-gray-800 uppercase tracking-wide text-left">Exclusive Members-Only Offers</p>
+                  <p className="text-[11px] sm:text-sm font-bold text-gray-800 uppercase tracking-wide text-left">Exclusive Members-Only Offers</p>
                 </div>
               </div>
 
@@ -115,16 +115,16 @@ export default function BigSubscriptionPopup() {
                 whileHover={{ y: -4, shadow: "0 20px 25px -5px rgba(220, 38, 38, 0.4)" }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShow(false)}
-                className="group relative w-full bg-red-600 text-white py-6 rounded-2xl font-black text-xl tracking-tighter transition-all shadow-xl shadow-red-200 overflow-hidden"
+                className="group relative w-full bg-red-600 text-white py-3 sm:py-6 rounded-lg sm:rounded-2xl font-black text-sm sm:text-xl tracking-tighter transition-all shadow-xl shadow-red-200 overflow-hidden"
               >
-                <span className="relative z-10 flex items-center justify-center gap-3">
-                  CLAIM PREMIUM STATUS <CheckCircle2 size={24} />
+                <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3">
+                  CLAIM PREMIUM STATUS <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
                 </span>
                 {/* Glossy Overlay Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               </motion.button>
 
-              <p className="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em]">
+              <p className="mt-4 sm:mt-8 text-gray-400 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.3em]">
                 Elevate your home experience
               </p>
             </div>
