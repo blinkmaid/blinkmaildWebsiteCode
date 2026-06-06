@@ -41,6 +41,11 @@ jobs:
       - name: Configure Android SDK Tools
         uses: android-actions/setup-android@v3
 
+      - name: Create Capacitor Asset Directories
+        run: |
+          mkdir -p android/app/src/main/assets
+          mkdir -p android/app/src/main/res
+
       - name: Sync Capacitor Bridge Configuration
         run: npx cap sync android
 
