@@ -5,13 +5,13 @@ import React from "react";
 import { HiOutlineMail, HiOutlinePhone, HiOutlineArrowRight } from "react-icons/hi";
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa6";
 import Image from "next/image";
-
+import Link from "next/link";
 export default function Footer() {
   const linkClass = "relative text-gray-400 hover:text-white transition-all duration-300 group flex items-center text-sm font-semibold tracking-wide";
 
   return (
     <footer className="relative bg-[#050505] pt-32 pb-12 overflow-hidden border-t border-white/5">
-      
+
       {/* --- CINEMATIC BACKGROUND ELEMENTS --- */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blinkred/10 rounded-full blur-[140px] -z-10 animate-pulse" />
       <div className="absolute -bottom-24 right-0 w-96 h-96 bg-blinkred/5 rounded-full blur-[120px] -z-10" />
@@ -90,14 +90,18 @@ export default function Footer() {
           >
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-blinkred">Support</h3>
             <ul className="space-y-5">
-              {['Privacy Policy', 'Terms of Use', 'Help Center'].map((item) => (
-                <li key={item}>
-                  <a href="#" className={linkClass}>
-                    <span className="w-0 group-hover:w-4 h-[1.5px] bg-blinkred mr-0 group-hover:mr-3 transition-all duration-300"></span>
-                    {item}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/terms" className={linkClass}>
+                  <span className="w-0 group-hover:w-4 h-[1.5px] bg-blinkred mr-0 group-hover:mr-3 transition-all duration-300"></span>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className={linkClass}>
+                  <span className="w-0 group-hover:w-4 h-[1.5px] bg-blinkred mr-0 group-hover:mr-3 transition-all duration-300"></span>
+                  Terms of Use
+                </Link>
+              </li>
             </ul>
           </motion.div>
 
@@ -112,9 +116,9 @@ export default function Footer() {
             <div className="space-y-6">
               <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-blinkred">Stay Connected</h3>
               <div className="relative group">
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
+                <input
+                  type="email"
+                  placeholder="Email Address"
                   className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm text-white focus:outline-none focus:border-blinkred/50 transition-all placeholder:text-gray-600"
                 />
                 <button className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-blinkred rounded-xl flex items-center justify-center text-white hover:scale-105 transition-transform">
@@ -153,9 +157,9 @@ export default function Footer() {
             </p>
             <div className="h-4 w-[1px] bg-white/10 hidden md:block" />
             <div className="flex gap-4">
-               {/* Small dot indicators for a 'Tech' feel */}
-               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-               <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">System Operational</span>
+              {/* Small dot indicators for a 'Tech' feel */}
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">System Operational</span>
             </div>
           </div>
         </div>

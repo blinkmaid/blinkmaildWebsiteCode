@@ -64,14 +64,49 @@ export default function MaidRegistrationForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // ... logic remains same as your original script ...
-    setTimeout(() => { 
-        toast.success("Application Received");
-        setLoading(false); 
-    }, 1500);
+
+    try {
+      // 1. Prepare data matching your database schema
+      const { data, error } = await supabase
+        .from("maids")
+        .insert([
+          {
+            name: formData.name,
+            number: formData.number,
+            address: formData.address, // Supabase handles JSONB automatically
+            experience: parseInt(formData.experience),
+            salary: parseInt(formData.salary),
+            work_types: formData.workTypes, // Supabase handles text[] automatically
+            photo_base64: photoBase64,
+            status: 'pending' // Default value as defined in your table
+          },
+        ]);
+
+      if (error) throw error;
+
+      toast.success("Application Received Successfully!");
+      
+      // Reset form
+      setFormData({
+        name: "",
+        number: "",
+        address: { house: "", street: "", area: "", landmark: "", city: "", pincode: "" },
+        experience: "",
+        salary: "",
+        workTypes: [],
+      });
+      setPhotoPreview(null);
+      setPhotoBase64(null);
+
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error(error.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const workOptions = ["Cooking", "Cleaning", "Baby Care", "Elderly Care", "Washing", "Ironing"];
