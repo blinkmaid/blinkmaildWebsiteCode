@@ -51,7 +51,12 @@ jobs:
 
       - name: Restore Android Keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_CONTENT }}" | base64 -d > android/app/release.keystore
+          echo "${{ secrets.ANDROID_KEYSTORE_CONTENT }}" | tr -d '\n\r ' | base64 -d > android/app/release.keystore
+
+      - name: Verify Keystore Exists
+        run: |
+          ls -lah android/app/
+          test -f android/app/release.keystore && echo "Keystore Found"
 
       - name: Build Signed Release AAB
         env:
@@ -61,7 +66,11 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew bundleRelease
+          ./gradlew bundleRelease --info
+
+      - name: Verify AAB Exists
+        run: |
+          ls -lah android/app/build/outputs/bundle/release/
 
       - name: Upload Signed AAB
         uses: actions/upload-artifact@v4

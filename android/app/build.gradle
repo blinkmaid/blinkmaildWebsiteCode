@@ -18,7 +18,7 @@ android {
         }
     }
 
-    signingConfigs {
+  signingConfigs {
         release {
             storeFile file("release.keystore")
             storePassword System.getenv("KEYSTORE_PASSWORD")
