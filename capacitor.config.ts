@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     // Direct live link so your mobile app updates instantly when you push web changes
-    url: 'https://blinkmaild-website-code.vercel.app/home', 
+    url: 'https://www.blinkmaid.com/', 
     cleartext: true
   },
   plugins: {

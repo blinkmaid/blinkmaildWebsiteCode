@@ -26,16 +26,6 @@ const slideIn = {
   transition: { duration: 0.5 },
 };
 
-/* ------------------------------
-   TEST MODE
-   When true, "Proceed to Secure Payment" skips Razorpay entirely and
-   simulates a successful payment (a real booking row is still written
-   to Supabase, with a fake payment_id/order_id, so the rest of the
-   flow behaves like production). Set this to false to re-enable real
-   Razorpay payments.
------------------------------- */
-const TEST_MODE = true;
-
 export default function ServiceBookingFlow() {
   const { id } = useParams();
   const router = useRouter();
@@ -270,30 +260,6 @@ export default function ServiceBookingFlow() {
     });
   };
 
-  // Shared booking insert used by both the real Razorpay handler and TEST_MODE
-  const createBookingRecord = async (user, paymentId, orderId) => {
-    return supabase.from("bookings").insert([
-      {
-        user_id: user.id,
-        service_name: service.name,
-        sub_service_name: selectedSubService?.name,
-        city: selectedCity?.name,
-        sub_service_price: Number(selectedSubService?.price || 0),
-        service_tax: serviceTax,
-        total_price: totalPrice,
-        final_amount: finalAmount,
-        discount_applied: isSubscribed,
-        booking_date: bookingData.startDate,
-        work_time: bookingData.workTime,
-        notes: bookingData.notes,
-        customer_details: customerDetails,
-        payment_status: "paid",
-        payment_id: paymentId,
-        order_id: orderId,
-      },
-    ]);
-  };
-
   const handlePayment = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -303,31 +269,6 @@ export default function ServiceBookingFlow() {
 
     if (!isAddressValid()) {
       setError("Please complete service address details before payment.");
-      return;
-    }
-
-    // ---------------------------------------------------------------
-    // TEST MODE: skip Razorpay entirely and simulate a successful
-    // booking. Flip TEST_MODE to false near the top of this file to
-    // go back to real Razorpay payments.
-    // ---------------------------------------------------------------
-    if (TEST_MODE) {
-      try {
-        const fakePaymentId = `test_pay_${Date.now()}`;
-        const fakeOrderId = `test_order_${Date.now()}`;
-
-        const { error: insertError } = await createBookingRecord(
-          user,
-          fakePaymentId,
-          fakeOrderId
-        );
-        if (insertError) throw insertError;
-
-        setPaymentSuccess(true);
-        setTimeout(() => router.push("/home"), 2000);
-      } catch (err) {
-        setError("Test booking failed: " + (err.message || err));
-      }
       return;
     }
 
@@ -360,7 +301,26 @@ export default function ServiceBookingFlow() {
             return;
           }
 
-          await createBookingRecord(user, res.razorpay_payment_id, res.razorpay_order_id);
+          await supabase.from("bookings").insert([
+            {
+              user_id: user.id,
+              service_name: service.name,
+              sub_service_name: selectedSubService?.name,
+              city: selectedCity?.name,
+              sub_service_price: Number(selectedSubService?.price || 0),
+              service_tax: serviceTax,
+              total_price: totalPrice,
+              final_amount: finalAmount,
+              discount_applied: isSubscribed,
+              booking_date: bookingData.startDate,
+              work_time: bookingData.workTime,
+              notes: bookingData.notes,
+              customer_details: customerDetails,
+              payment_status: "paid",
+              payment_id: res.razorpay_payment_id,
+              order_id: res.razorpay_order_id,
+            },
+          ]);
 
           setPaymentSuccess(true);
           setTimeout(() => router.push("/home"), 2000);
@@ -532,6 +492,8 @@ export default function ServiceBookingFlow() {
               </div>
             </motion.div>
           )}
+
+          {/* STEP 3: Configuration
 
           {/* STEP 3: Configuration */}
           {step === 3 && (
